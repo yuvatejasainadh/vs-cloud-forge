@@ -1,0 +1,273 @@
+{
+  "schema_version": "2.1.0",
+  "default_model_id": "open-vakgyata",
+  "models": {
+    "facebook-wav2vec2-xls-r-300m": {
+      "id": "facebook-wav2vec2-xls-r-300m",
+      "model_id": "facebook-wav2vec2-xls-r-300m",
+      "model_name": "Facebook Wav2Vec2 XLS-R 300M (Speech Encoder Backbone)",
+      "role": "BACKBONE",
+      "task": "SPEECH_ENCODER",
+      "architecture": "WAV2VEC2-XLS-R",
+      "family": "XLS-R",
+      "parameter_count": 317374720,
+      "parameters": 317374720,
+      "provider": "meta-facebook",
+      "source": "huggingface",
+      "repository": "facebook/wav2vec2-xls-r-300m",
+      "revision": "1a640f32ac3e39899438a2931f9924c02f080a54",
+      "runtime": "transformers-pytorch",
+      "framework": "transformers-pytorch",
+      "sample_rate": 16000,
+      "channels": 1,
+      "status": "ACTIVE",
+      "language_labels": [],
+      "supported_languages": [],
+      "artifact": {
+        "source": "huggingface",
+        "repository": "facebook/wav2vec2-xls-r-300m",
+        "revision": "1a640f32ac3e39899438a2931f9924c02f080a54",
+        "cache_dir": "models/huggingface/facebook/wav2vec2-xls-r-300m/1a640f32ac3e39899438a2931f9924c02f080a54",
+        "files": [
+          "config.json",
+          "preprocessor_config.json",
+          "pytorch_model.bin"
+        ],
+        "size_bytes": 1269737156,
+        "sha256": "d5e490574712ad0a6736923b9ed11d4cd51c78609c36205f704fc4e87b11d2e0"
+      },
+      "sha256": "d5e490574712ad0a6736923b9ed11d4cd51c78609c36205f704fc4e87b11d2e0"
+    },
+    "open-vakgyata": {
+      "id": "open-vakgyata",
+      "model_id": "open-vakgyata",
+      "model_name": "Open-Vakgyata (10-Class Benchmark)",
+      "role": "END_TO_END",
+      "provider": "onecxi",
+      "source": "huggingface",
+      "repository": "onecxi/open-vakgyata",
+      "revision": "f2754058e485dfc65cc62589b8d0e21c1d328399",
+      "task": "LID",
+      "architecture": "WAV2VEC2-LID",
+      "framework": "onnx",
+      "runtime": "onnx",
+      "version": "f2754058e485dfc65cc62589b8d0e21c1d328399",
+      "parameters": 58746794,
+      "artifact_size_mb": 224.19,
+      "sample_rate": 16000,
+      "channels": 1,
+      "status": "BENCHMARK",
+      "supported_languages": [
+        "en-IN",
+        "hi-IN",
+        "or-IN",
+        "bn-IN",
+        "ta-IN",
+        "te-IN",
+        "kn-IN",
+        "ml-IN",
+        "mr-IN",
+        "gu-IN"
+      ],
+      "language_labels": [
+        "en-IN",
+        "hi-IN",
+        "or-IN",
+        "bn-IN",
+        "ta-IN",
+        "te-IN",
+        "kn-IN",
+        "ml-IN",
+        "mr-IN",
+        "gu-IN"
+      ],
+      "language_names": {
+        "en-IN": "English",
+        "hi-IN": "Hindi",
+        "or-IN": "Odia",
+        "bn-IN": "Bengali",
+        "ta-IN": "Tamil",
+        "te-IN": "Telugu",
+        "kn-IN": "Kannada",
+        "ml-IN": "Malayalam",
+        "mr-IN": "Marathi",
+        "gu-IN": "Gujarati"
+      },
+      "artifacts": {
+        "model.onnx": {
+          "url": "https://huggingface.co/onecxi/open-vakgyata/resolve/main/onnx/model_quantized.onnx",
+          "size_bytes": 235086936
+        },
+        "config.json": {
+          "url": "https://huggingface.co/onecxi/open-vakgyata/raw/main/config.json"
+        },
+        "preprocessor_config.json": {
+          "url": "https://huggingface.co/onecxi/open-vakgyata/raw/main/preprocessor_config.json"
+        }
+      },
+      "artifact": {
+        "source": "huggingface",
+        "repository": "onecxi/open-vakgyata",
+        "revision": "f2754058e485dfc65cc62589b8d0e21c1d328399",
+        "sha256": "c4cc68450a7e571c21acb6928553f5cbba3e5f136d554210c07f5fbbe37d1d79"
+      },
+      "sha256": "c4cc68450a7e571c21acb6928553f5cbba3e5f136d554210c07f5fbbe37d1d79"
+    },
+    "voiceshield-lid-primary": {
+      "id": "voiceshield-lid-primary",
+      "model_id": "voiceshield-lid-primary",
+      "model_name": "VoiceShield 19-Language LID Primary",
+      "role": "CANDIDATE",
+      "provider": "voiceshield-ai",
+      "source": "internal",
+      "task": "LID",
+      "architecture": "WAV2VEC2-XLS-R",
+      "framework": "onnx",
+      "runtime": "onnx",
+      "version": "candidate-v1.0",
+      "parameters": 315000000,
+      "sample_rate": 16000,
+      "channels": 1,
+      "status": "CANDIDATE",
+      "supported_languages": [
+        "te-IN",
+        "ta-IN",
+        "ml-IN",
+        "kn-IN",
+        "hi-IN",
+        "mr-IN",
+        "sa-IN",
+        "bn-IN",
+        "as-IN",
+        "or-IN",
+        "bpy-IN",
+        "pa-IN",
+        "ks-IN",
+        "sd-IN",
+        "ur-IN",
+        "gu-IN",
+        "raj-IN",
+        "kut-IN",
+        "en-IN"
+      ],
+      "language_labels": [
+        "te-IN",
+        "ta-IN",
+        "ml-IN",
+        "kn-IN",
+        "hi-IN",
+        "mr-IN",
+        "sa-IN",
+        "bn-IN",
+        "as-IN",
+        "or-IN",
+        "bpy-IN",
+        "pa-IN",
+        "ks-IN",
+        "sd-IN",
+        "ur-IN",
+        "gu-IN",
+        "raj-IN",
+        "kut-IN",
+        "en-IN"
+      ]
+    },
+    "voiceshield-aasist-south": {
+      "id": "voiceshield-aasist-south",
+      "model_id": "voiceshield-aasist-south",
+      "model_name": "VoiceShield AASIST-L South Indic Detector",
+      "role": "DETECTOR",
+      "target_vm": "VM2_SOUTH",
+      "group": "SOUTH",
+      "task": "DEEPFAKE_DETECTION",
+      "framework": "pytorch/onnx",
+      "status": "PLANNED",
+      "supported_languages": ["te-IN", "ta-IN", "ml-IN", "kn-IN"]
+    },
+    "voiceshield-aasist-north": {
+      "id": "voiceshield-aasist-north",
+      "model_id": "voiceshield-aasist-north",
+      "model_name": "VoiceShield AASIST-L North Indic Detector",
+      "role": "DETECTOR",
+      "target_vm": "VM3_NORTH",
+      "group": "NORTH",
+      "task": "DEEPFAKE_DETECTION",
+      "framework": "pytorch/onnx",
+      "status": "PLANNED",
+      "supported_languages": ["hi-IN", "mr-IN", "sa-IN"]
+    },
+    "voiceshield-aasist-east": {
+      "id": "voiceshield-aasist-east",
+      "model_id": "voiceshield-aasist-east",
+      "model_name": "VoiceShield AASIST-L East Indic Detector",
+      "role": "DETECTOR",
+      "target_vm": "VM4_EAST",
+      "group": "EAST",
+      "task": "DEEPFAKE_DETECTION",
+      "framework": "pytorch/onnx",
+      "status": "PLANNED",
+      "supported_languages": ["bn-IN", "as-IN", "or-IN", "bpy-IN"]
+    },
+    "voiceshield-aasist-frontier": {
+      "id": "voiceshield-aasist-frontier",
+      "model_id": "voiceshield-aasist-frontier",
+      "model_name": "VoiceShield AASIST-L North-West / Frontier Indic Detector",
+      "role": "DETECTOR",
+      "target_vm": "VM5_NORTH_WEST_FRONTIER",
+      "group": "NORTH_WEST_FRONTIER",
+      "task": "DEEPFAKE_DETECTION",
+      "framework": "pytorch/onnx",
+      "status": "PLANNED",
+      "supported_languages": ["pa-IN", "ks-IN", "sd-IN", "ur-IN"]
+    },
+    "voiceshield-aasist-west": {
+      "id": "voiceshield-aasist-west",
+      "model_id": "voiceshield-aasist-west",
+      "model_name": "VoiceShield AASIST-L West Indic Detector",
+      "role": "DETECTOR",
+      "target_vm": "VM6_WEST",
+      "group": "WEST",
+      "task": "DEEPFAKE_DETECTION",
+      "framework": "pytorch/onnx",
+      "status": "PLANNED",
+      "supported_languages": ["gu-IN", "raj-IN", "kut-IN"]
+    },
+    "voiceshield-aasist-english": {
+      "id": "voiceshield-aasist-english",
+      "model_id": "voiceshield-aasist-english",
+      "model_name": "VoiceShield AASIST-L English Detector",
+      "role": "DETECTOR",
+      "target_vm": "VM7_ENGLISH",
+      "group": "ENGLISH",
+      "language": "en-IN",
+      "architecture": "AASIST-L",
+      "runtime": "onnx",
+      "framework": "onnx",
+      "provider": "cloudforge",
+      "source": "huggingface",
+      "repository": "SpeechAntiSpoofingBenchmarks/AASIST-L",
+      "revision": "357e022c44a1aa926097e18c1457bde3873ed8bf",
+      "parameters": 85306,
+      "task": "DEEPFAKE_DETECTION",
+      "sample_rate": 16000,
+      "channels": 1,
+      "status": "ACTIVE",
+      "supported_languages": ["en-IN"],
+      "artifacts": {
+        "model.onnx": {
+          "source_type": "local_filesystem",
+          "path": "model-cache/voiceshield-aasist-english/v1.0.0/model.onnx",
+          "size_bytes": 766114,
+          "sha256": "f43f0a638b52846f5d0e630c0a738d10e9306325945127c6f8662d559585f218"
+        }
+      },
+      "artifact": {
+        "source": "local_filesystem",
+        "path": "model-cache/voiceshield-aasist-english/v1.0.0/model.onnx",
+        "size_bytes": 766114,
+        "sha256": "f43f0a638b52846f5d0e630c0a738d10e9306325945127c6f8662d559585f218"
+      },
+      "sha256": "f43f0a638b52846f5d0e630c0a738d10e9306325945127c6f8662d559585f218"
+    }
+  }
+}

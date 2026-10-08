@@ -1,0 +1,86 @@
+{
+  "evaluation_name": "CloudForge V2 E2E Pipeline & Canonical Routing Validation (200 Samples)",
+  "random_seed": 42,
+  "sample_configuration": {
+    "total_samples": 200,
+    "multilingual_dataset_samples": 100,
+    "deepfake_dataset_samples": 100
+  },
+  "routing_results": {
+    "total_samples": 200,
+    "successfully_routed": 200,
+    "routed_to_aasist_l": 95,
+    "non_english_routed": 105,
+    "lid_unavailable": 0,
+    "unsupported_language": 0,
+    "invalid_audio": 0,
+    "routing_errors": 0,
+    "routing_success_rate_percent": 100.0
+  },
+  "inference_execution_governance": {
+    "detector_inference_executed": 0,
+    "aasist_l_inference_executed": 0,
+    "governance_rule": "AASIST-L and deepfake detector inference strictly bypassed/disabled for E2E routing verification."
+  },
+  "distribution": {
+    "languages": {
+      "hi-IN": 27,
+      "ta-IN": 15,
+      "gu-IN": 9,
+      "mr-IN": 13,
+      "bn-IN": 18,
+      "kn-IN": 20,
+      "te-IN": 2,
+      "en-IN": 95,
+      "ml-IN": 1
+    },
+    "semantic_groups": {
+      "NORTH": 40,
+      "SOUTH": 38,
+      "WEST": 9,
+      "EAST": 18,
+      "ENGLISH": 95
+    },
+    "target_vms": {
+      "VM3_NORTH": 40,
+      "VM2_SOUTH": 38,
+      "VM6_WEST": 9,
+      "VM4_EAST": 18,
+      "VM7_ENGLISH": 95
+    },
+    "dataset_language_breakdown": {
+      "Multilingual Dataset": {
+        "hi-IN": 25,
+        "ta-IN": 11,
+        "gu-IN": 9,
+        "mr-IN": 11,
+        "bn-IN": 16,
+        "kn-IN": 18,
+        "te-IN": 2,
+        "en-IN": 8
+      },
+      "Deepfake Dataset": {
+        "hi-IN": 2,
+        "ta-IN": 4,
+        "en-IN": 87,
+        "mr-IN": 2,
+        "ml-IN": 1,
+        "bn-IN": 2,
+        "kn-IN": 2
+      }
+    }
+  },
+  "latency_metrics_ms": {
+    "p50": 545.96,
+    "p95": 1062.88,
+    "p99": 1076.44,
+    "mean": 636.85,
+    "min": 160.01,
+    "max": 1248.37
+  },
+  "memory_rss_mb": {
+    "initial": 117.92,
+    "final": 652.97
+  },
+  "final_status": "E2E ROUTING VERIFIED"
+}

@@ -1,0 +1,29 @@
+# CloudForge VMC-LID Service Configuration V2
+service:
+  name: "vmc-lid"
+  version: "v2.0.0"
+  platform: "cloudforge"
+  environment: "development"
+
+server:
+  grpc_port: 50051
+  metrics_port: 9090
+  metrics_enabled: true
+  max_recv_msg_size_mb: 32
+  max_send_msg_size_mb: 32
+  graceful_timeout_seconds: 5
+
+model:
+  registry_path: "C:/CloudForge/models/registry.json"
+  models_dir: "C:/CloudForge/models"
+  active_model_id: "open-vakgyata"
+  confidence_threshold: 0.50
+  accept_threshold: 0.80
+  execution_providers:
+    - "CPUExecutionProvider"
+  num_threads: 4
+
+routing:
+  canonical_registry_file: "C:/CloudForge/services/vmc-lid/configs/canonical_registry.yaml"
+  language_groups_file: "C:/CloudForge/services/vmc-lid/configs/canonical_registry.yaml"
+  lacr_checkpoint_interval: 5

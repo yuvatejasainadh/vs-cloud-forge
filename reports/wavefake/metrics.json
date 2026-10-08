@@ -1,0 +1,89 @@
+{
+  "evaluation_timestamp": "2026-10-06T17:43:28Z",
+  "dataset_summary": {
+    "dataset_path": "C:\\Users\\yuvat\\Downloads\\sources_wavefake\\_sources_wavefake",
+    "total_files": 2007,
+    "valid_audio_files": 2007,
+    "invalid_audio_files": 0,
+    "total_duration_seconds": 14402.4908125,
+    "total_duration_hours": 4.000691892361111,
+    "min_duration_seconds": 4.001,
+    "max_duration_seconds": 10.09625,
+    "avg_duration_seconds": 7.176128954907822,
+    "sample_rate_distribution": {
+      "16000": 2007
+    },
+    "channel_distribution": {
+      "1": 2007
+    },
+    "format_distribution": {
+      ".wav": 2007
+    },
+    "label_distribution": {
+      "SPOOF": 1000,
+      "BONAFIDE": 1007
+    }
+  },
+  "evaluation_scope": {
+    "total_samples_evaluated": 2007,
+    "evaluation_duration_seconds": 1044.9662728999974,
+    "throughput_qps": 1.920636150705764,
+    "skip_lid": false,
+    "skip_vm7": false
+  },
+  "lid_metrics": {
+    "model_id": "open-vakgyata",
+    "model_version": "f2754058e485dfc65cc62589b8d0e21c1d328399",
+    "status_distribution": {
+      "OK": 2007
+    },
+    "language_distribution": {
+      "en-IN": 2007
+    },
+    "english_predictions": 2007,
+    "non_english_predictions": 0,
+    "english_detection_rate_pct": 100.0,
+    "latency_ms": {
+      "p50": 511.48440000542905,
+      "p95": 762.8155600046738,
+      "p99": 933.4816139927717,
+      "min": 208.25190001050942,
+      "max": 1188.239800001611,
+      "mean": 518.9692800696712
+    }
+  },
+  "routing_metrics": {
+    "en_in_to_english_group_count": 2007,
+    "english_group_to_vm7_count": 2007,
+    "vm7_routing_success_rate_pct": 100.0,
+    "routing_status_distribution": {
+      "OK": 2007
+    },
+    "latency_ms": {
+      "p50": 0.0013999961083754897,
+      "p95": 0.0020000006770715117,
+      "p99": 0.0024000037228688598,
+      "mean": 0.0015242152735864716
+    }
+  },
+  "deepfake_metrics": {
+    "model_id": "voiceshield-aasist-english",
+    "model_version": "v1.0.0",
+    "artifact_status": "BLOCKED_AWAITING_ARTIFACT",
+    "runtime_status": "UNHYDRATED",
+    "samples_routed_to_vm7": 2007,
+    "latency_ms": {
+      "p50": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "mean": 0.0
+    }
+  },
+  "e2e_latency_ms": {
+    "p50": 512.7307000075234,
+    "p95": 765.0762000062965,
+    "p99": 935.4658179954276,
+    "mean": 520.6519278526222
+  },
+  "error_classification": {}
+}

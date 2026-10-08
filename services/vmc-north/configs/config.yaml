@@ -1,0 +1,17 @@
+service:
+  name: vmc-north
+  target_vm: VM3_NORTH
+  group: NORTH
+  version: v1.0.0-scaffold
+  status: PLANNED
+server:
+  grpc_port: 50053
+  metrics_port: 51053
+  max_recv_msg_size_mb: 32
+model:
+  model_id: voiceshield-aasist-north
+  model_type: MULTILINGUAL_AASIST_L
+  supported_languages:
+  - hi-IN
+  - mr-IN
+  - sa-IN

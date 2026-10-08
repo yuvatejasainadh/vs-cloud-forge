@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vmc-lid
+  namespace: ml-platform
+  labels:
+    app.kubernetes.io/name: vmc-lid
+    app.kubernetes.io/component: inference
+    app.kubernetes.io/part-of: cloudforge
+    platform.cloudforge.io/domain: vmc
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: vmc-lid
+  ports:
+    - name: grpc
+      port: 50051
+      targetPort: 50051
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+      protocol: TCP

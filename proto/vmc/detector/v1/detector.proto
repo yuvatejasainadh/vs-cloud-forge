@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package vmc.detector.v1;
+
+option go_package = "cloudforge-vmc-detector/gen/vmc/detector/v1;detectorv1";
+
+// Deepfake Voice Detection Service for Indic and English VoiceShield detector clusters (VM2–VM7).
+service DetectorService {
+  // DetectSpoof analyzes speech audio and returns deepfake/spoof probability scores.
+  rpc DetectSpoof(DetectSpoofRequest) returns (DetectSpoofResponse);
+
+  // GetDetectorInfo returns metadata about the active detector model and supported languages.
+  rpc GetDetectorInfo(DetectorInfoRequest) returns (DetectorInfoResponse);
+}
+
+enum DetectionStatus {
+  DETECTION_STATUS_UNSPECIFIED = 0;
+  DETECTION_STATUS_GENUINE = 1;
+  DETECTION_STATUS_SPOOF = 2;
+  DETECTION_STATUS_UNCERTAIN = 3;
+  DETECTION_STATUS_INVALID_AUDIO = 4;
+  DETECTION_STATUS_INFERENCE_ERROR = 5;
+  DETECTION_STATUS_MODEL_UNAVAILABLE = 6;
+  DETECTION_STATUS_UNSUPPORTED_LANGUAGE = 7;
+  DETECTION_STATUS_LOW_CONFIDENCE = 8;
+}
+
+message DetectSpoofRequest {
+  // Raw PCM or WAV audio bytes
+  bytes audio_content = 1;
+
+  // Audio sample rate (Hz)
+  int32 sample_rate = 2;
+
+  // Number of channels (1 = mono)
+  int32 channels = 3;
+
+  // Audio format ("pcm_s16le", "pcm_f32le", "wav")
+  string audio_format = 4;
+
+  // Language code routed from LID (e.g., "te-IN", "hi-IN", "en-IN")
+  string language = 5;
+
+  // Language group routed from LID (e.g., "SOUTH", "NORTH", "ENGLISH")
+  string language_group = 6;
+
+  // Request correlation ID
+  string request_id = 7;
+
+  // Session ID for multi-chunk aggregation
+  string session_id = 8;
+
+  // Sequential chunk index in the call session
+  int64 chunk_index = 9;
+}
+
+message DetectSpoofResponse {
+  // Spoof/fake probability score between 0.0 and 1.0 (higher = more likely fake)
+  float spoof_score = 1;
+
+  // Genuine/bonafide score between 0.0 and 1.0
+  float bonafide_score = 2;
+
+  // Confidence of the decision between 0.0 and 1.0
+  float confidence = 3;
+
+  // Classification decision status
+  DetectionStatus status = 4;
+
+  // Assigned language group (echo)
+  string language_group = 5;
+
+  // Serving VM identifier (e.g., "VM7_ENGLISH")
+  string target_vm = 6;
+
+  // Evaluated language code (e.g., "en-IN")
+  string language = 7;
+
+  // Detector model identifier
+  string model_id = 8;
+
+  // Detector model version
+  string model_version = 9;
+
+  // Request correlation ID
+  string request_id = 10;
+
+  // Inference duration in milliseconds
+  double inference_duration_ms = 11;
+}
+
+message DetectorInfoRequest {
+  string model_id = 1;
+}
+
+message DetectorInfoResponse {
+  string model_id = 1;
+  string model_name = 2;
+  string target_vm = 3;
+  string group = 4;
+  string model_type = 5;
+  repeated string supported_languages = 6;
+  string status = 7;
+  string provider = 8;
+  string framework = 9;
+}

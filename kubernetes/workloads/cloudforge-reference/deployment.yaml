@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudforge-reference
+  namespace: cloudforge-system
+  labels:
+    app.kubernetes.io/name: cloudforge-reference
+    app.kubernetes.io/instance: cloudforge-reference
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: cloudforge
+    app.kubernetes.io/managed-by: kustomize
+    platform: cloudforge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cloudforge-reference
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+      labels:
+        app.kubernetes.io/name: cloudforge-reference
+        app.kubernetes.io/instance: cloudforge-reference
+        app.kubernetes.io/version: "1.0.0"
+        app.kubernetes.io/component: service
+        app.kubernetes.io/part-of: cloudforge
+        platform: cloudforge
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      nodeSelector:
+        workload: application
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudforge-reference
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudforge-reference
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: cloudforge-reference
+          image: cloudforge/cloudforge-reference:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: grpc
+              containerPort: 50051
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "50051"
+            - name: METRICS_PORT
+              value: "9090"
+            - name: METRICS_ENABLED
+              value: "true"
+            - name: GRPC_MAX_RECV_MSG_SIZE_MB
+              value: "32"
+            - name: GRPC_MAX_SEND_MSG_SIZE_MB
+              value: "32"
+            - name: SERVICE_NAME
+              value: "cloudforge-reference"
+            - name: SERVICE_VERSION
+              value: "v1.0.0"
+            - name: PLATFORM_NAME
+              value: "cloudforge"
+            - name: ENVIRONMENT
+              value: "local"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          readinessProbe:
+            grpc:
+              port: 50051
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            grpc:
+              port: 50051
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3

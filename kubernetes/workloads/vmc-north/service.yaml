@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vmc-north
+  namespace: ml-platform
+  labels:
+    app.kubernetes.io/name: vmc-north
+    app.kubernetes.io/component: detector
+    voiceshield.io/vm: VM3_NORTH
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 50053
+      targetPort: 50053
+      protocol: TCP
+    - name: metrics
+      port: 51053
+      targetPort: 51053
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: vmc-north

@@ -1,0 +1,703 @@
+{
+  "audit_date": "2026-10-08",
+  "repository": "VoiceShield CloudForge",
+  "auditor_role": "Principal Cloud Infrastructure Architect + ML Platform Architect + Software Auditor",
+  "governance_standard": "Strict Evidence-Based / Anti-Fabrication",
+  "summary_metrics": {
+    "maturity_status": "EARLY-STAGE INFRASTRUCTURE & LID BASELINE (Estimated ~28% of full VoiceShield V2 production architecture)",
+    "total_pipelines_audited": 22,
+    "implemented_pipelines": 4,
+    "validated_pipelines": 3,
+    "real_ml_models": 2,
+    "real_grpc_services": 3,
+    "production_ready_components": 2,
+    "blocked_components": 3,
+    "scaffolded_components": 6,
+    "planned_or_missing_components": 7
+  },
+  "pipelines": [
+    {
+      "id": "PIPE-01",
+      "name": "Audio Ingestion & Format Validation",
+      "status": "IMPLEMENTED + VALIDATED",
+      "evidence": "services/vmc-lid/src/core/audio_processor.py, services/vmc-english/src/core/audio_processor.py",
+      "details": "Validates PCM 16-bit LE, WAV headers, mono/stereo conversion, rejecting empty/corrupt audio."
+    },
+    {
+      "id": "PIPE-02",
+      "name": "Audio Preprocessing & Resampling",
+      "status": "IMPLEMENTED + VALIDATED",
+      "evidence": "services/vmc-lid/src/core/audio_processor.py (resample_poly, z-score normalization), services/vmc-english/src/core/audio_processor.py (64,600 AASIST windowing)",
+      "details": "Polyphase sinc resampling (8/16/22.05/44.1/48 kHz to 16 kHz), zero-mean unit-variance normalization, NaN/Inf sanitization."
+    },
+    {
+      "id": "PIPE-03",
+      "name": "VM1 LID (Language Identification - Open-Vakgyata)",
+      "status": "IMPLEMENTED + VALIDATED",
+      "evidence": "models/open-vakgyata/f2754058e485dfc65cc62589b8d0e21c1d328399/model.onnx (235MB, SHA256: c4cc68...), services/vmc-lid/src/runtimes/open_vakgyata_runtime.py, 92 pytest tests passing",
+      "details": "10-class Indic + English ONNX runtime inference, ~97.6ms P50 latency."
+    },
+    {
+      "id": "PIPE-04",
+      "name": "LACR (Language-Aware Continuous Routing)",
+      "status": "IMPLEMENTED + VALIDATED",
+      "evidence": "services/vmc-lid/src/routing/lacr.py, services/vmc-lid/tests/unit/test_lacr.py",
+      "details": "Chunk-level session state caching (checkpoint interval = 5 chunks), mid-call code switching detection with >=0.80 confidence."
+    },
+    {
+      "id": "PIPE-05",
+      "name": "DSR / XLS-R 300M Speech Representation",
+      "status": "PARTIALLY IMPLEMENTED (REPRESENTATION VALIDATED | CLASSIFIER HEAD BLOCKED)",
+      "evidence": "models/huggingface/facebook/wav2vec2-xls-r-300m/1a640f32ac3e39899438a2931f9924c02f080a54/pytorch_model.bin (1.27GB, SHA256: d5e490...), services/vmc-lid/src/runtimes/xlsr_runtime.py",
+      "details": "Extracts 1024-dim masked mean-pooled representations. 19-class classification head is UNAVAILABLE / NOT TRAINED."
+    },
+    {
+      "id": "PIPE-06",
+      "name": "Canonical 19-Language Regional Routing Resolver",
+      "status": "IMPLEMENTED + VALIDATED",
+      "evidence": "services/vmc-lid/src/routing/canonical_registry.py, configs/canonical_registry.yaml, tests/unit/test_canonical_registry.py",
+      "details": "Authoritative O(1) hash resolution for 19 languages to 6 semantic groups and 7 target VMs."
+    },
+    {
+      "id": "PIPE-07",
+      "name": "VM2 SOUTH Detector (Telugu, Tamil, Malayalam, Kannada)",
+      "status": "SCAFFOLDED",
+      "evidence": "services/vmc-south/src/service/detector_service.py",
+      "details": "Returns hardcoded mock scores (spoof=0.05, bonafide=0.95). No real model, no server entrypoint, no Dockerfile, no tests."
+    },
+    {
+      "id": "PIPE-08",
+      "name": "VM3 NORTH Detector (Hindi, Marathi, Sanskrit)",
+      "status": "SCAFFOLDED",
+      "evidence": "services/vmc-north/src/service/detector_service.py",
+      "details": "Returns hardcoded mock scores. No real model, no server entrypoint, no Dockerfile, no tests."
+    },
+    {
+      "id": "PIPE-09",
+      "name": "VM4 EAST Detector (Bengali, Assamese, Odia, Bishnupriya Manipuri)",
+      "status": "SCAFFOLDED",
+      "evidence": "services/vmc-east/src/service/detector_service.py",
+      "details": "Returns hardcoded mock scores. No real model, no server entrypoint, no Dockerfile, no tests."
+    },
+    {
+      "id": "PIPE-10",
+      "name": "VM5 NORTH_WEST_FRONTIER Detector (Punjabi, Kashmiri, Sindhi, Urdu)",
+      "status": "SCAFFOLDED",
+      "evidence": "services/vmc-frontier/src/service/detector_service.py",
+      "details": "Returns hardcoded mock scores. No real model, no server entrypoint, no Dockerfile, no tests."
+    },
+    {
+      "id": "PIPE-11",
+      "name": "VM6 WEST Detector (Gujarati, Rajasthani, Kutchi)",
+      "status": "SCAFFOLDED",
+      "evidence": "services/vmc-west/src/service/detector_service.py",
+      "details": "Returns hardcoded mock scores. No real model, no server entrypoint, no Dockerfile, no tests."
+    },
+    {
+      "id": "PIPE-12",
+      "name": "VM7 ENGLISH Detector (AASIST-L Service)",
+      "status": "PARTIALLY IMPLEMENTED (CODE & ONNX MODEL EXIST | UNCALIBRATED | MOCK IN TESTS)",
+      "evidence": "services/vmc-english/src/core/detector.py, model-cache/voiceshield-aasist-english/v1.0.0/model.onnx (766KB, SHA256: f43f0a...), tests/integration/test_grpc_service.py",
+      "details": "Native ONNX AASIST-L runtime loads successfully. Threshold is default 0.50 (calibrated: false). gRPC integration tests use MockTestRuntime."
+    },
+    {
+      "id": "PIPE-13",
+      "name": "AASIST-L Real Deepfake Inference Pipeline",
+      "status": "IMPLEMENTED BUT UNCALIBRATED",
+      "evidence": "model-cache/voiceshield-aasist-english/v1.0.0/model.onnx, benchmarks/detectors/english_aasist/runner.py",
+      "details": "ONNX model executes inference on [batch, 64600] audio. Lacks calibrated threshold on labeled test sets."
+    },
+    {
+      "id": "PIPE-14",
+      "name": "RIAS (Risk Identification & Assessment System)",
+      "status": "NOT FOUND / NOT IMPLEMENTED (PLANNED NEXT TRACK)",
+      "evidence": "Zero source files, zero protos, zero tests in repository.",
+      "details": "No code, proto, service, or models exist for RIAS in the current repository."
+    },
+    {
+      "id": "PIPE-15",
+      "name": "TCED (Threat/Call Evaluation & Decision Engine)",
+      "status": "NOT FOUND / NOT IMPLEMENTED",
+      "evidence": "Zero source files, zero protos, zero tests in repository.",
+      "details": "No multi-signal fusion engine (LID + Deepfake + RIAS) exists yet."
+    },
+    {
+      "id": "PIPE-16",
+      "name": "Final Android App Report/Contract",
+      "status": "NOT FOUND / NOT IMPLEMENTED",
+      "evidence": "Zero source files, zero proto schemas for Android report output.",
+      "details": "No proto schema or payload formatter for Android client consumption exists."
+    },
+    {
+      "id": "PIPE-17",
+      "name": "Observability & Prometheus Telemetry",
+      "status": "IMPLEMENTED + VALIDATED",
+      "evidence": "services/vmc-lid/src/telemetry/metrics.py, services/vmc-english/src/telemetry/metrics.py, port 9090 HTTP server (/metrics, /healthz)",
+      "details": "Prometheus counters, gauges, histograms for inference latency, load times, and error types."
+    },
+    {
+      "id": "PIPE-18",
+      "name": "Model Registry & Schema Validation",
+      "status": "IMPLEMENTED + VALIDATED",
+      "evidence": "models/registry.json (v2.1.0), services/vmc-lid/src/core/model_registry.py",
+      "details": "Structured metadata catalog defining model roles, frameworks, status, and artifact locations."
+    },
+    {
+      "id": "PIPE-19",
+      "name": "Artifact Management & SHA256 Integrity Verification",
+      "status": "IMPLEMENTED + VALIDATED",
+      "evidence": "services/vmc-lid/src/core/artifact_resolver.py, services/vmc-english/src/core/artifact_resolver.py",
+      "details": "Bit-exact SHA256 integrity verification, local caching, and download tooling."
+    },
+    {
+      "id": "PIPE-20",
+      "name": "gRPC Infrastructure & Inter-Service Networking",
+      "status": "PARTIALLY IMPLEMENTED (LOCALHOST STANDALONE SERVERS | NO DISTRIBUTED MESH)",
+      "evidence": "proto/vmc/lid/v1/lid.proto, proto/vmc/detector/v1/detector.proto, services/vmc-lid/src/server/grpc_server.py, services/vmc-english/src/server/grpc_server.py",
+      "details": "Standalone gRPC servers exist for VM1, VM7, and reference. No inter-service RPC routing client or API gateway exists to orchestrate requests across VMs."
+    },
+    {
+      "id": "PIPE-21",
+      "name": "Cloud / Deployment Infrastructure",
+      "status": "SCAFFOLDED / LOCAL K8S ONLY",
+      "evidence": "kubernetes/workloads/*, kind-config.yaml, Dockerfiles for reference, vmc-lid, vmc-english",
+      "details": "Local Kubernetes/Kind manifests and Dockerfiles exist for 3 services. No cloud (AWS/EKS/GCP) deployment scripts or infrastructure-as-code exist."
+    },
+    {
+      "id": "PIPE-22",
+      "name": "Test & Evaluation Infrastructure",
+      "status": "IMPLEMENTED + VALIDATED",
+      "evidence": "scripts/verify-all.ps1, services/vmc-lid/tools/evaluate_*.py, reports/*.json",
+      "details": "Evaluation harnesses for 200-sample routing, 12-language routing, WaveFake dataset, and Deepfake dataset."
+    }
+  ],
+  "services": [
+    {
+      "name": "cloudforge-reference",
+      "language": "Go",
+      "port": 50051,
+      "metrics_port": 9090,
+      "status": "IMPLEMENTED + VALIDATED",
+      "has_dockerfile": true,
+      "has_k8s": true,
+      "has_tests": true,
+      "test_framework": "go test"
+    },
+    {
+      "name": "vmc-lid",
+      "language": "Python",
+      "port": 50051,
+      "metrics_port": 9090,
+      "status": "IMPLEMENTED + VALIDATED",
+      "has_dockerfile": true,
+      "has_k8s": true,
+      "has_tests": true,
+      "test_framework": "pytest (92 tests passed)"
+    },
+    {
+      "name": "vmc-south",
+      "language": "Python",
+      "port": 50052,
+      "metrics_port": 9090,
+      "status": "SCAFFOLDED",
+      "has_dockerfile": false,
+      "has_k8s": true,
+      "has_tests": false,
+      "test_framework": null
+    },
+    {
+      "name": "vmc-north",
+      "language": "Python",
+      "port": 50053,
+      "metrics_port": 9090,
+      "status": "SCAFFOLDED",
+      "has_dockerfile": false,
+      "has_k8s": true,
+      "has_tests": false,
+      "test_framework": null
+    },
+    {
+      "name": "vmc-east",
+      "language": "Python",
+      "port": 50054,
+      "metrics_port": 9090,
+      "status": "SCAFFOLDED",
+      "has_dockerfile": false,
+      "has_k8s": true,
+      "has_tests": false,
+      "test_framework": null
+    },
+    {
+      "name": "vmc-frontier",
+      "language": "Python",
+      "port": 50055,
+      "metrics_port": 9090,
+      "status": "SCAFFOLDED",
+      "has_dockerfile": false,
+      "has_k8s": true,
+      "has_tests": false,
+      "test_framework": null
+    },
+    {
+      "name": "vmc-west",
+      "language": "Python",
+      "port": 50056,
+      "metrics_port": 9090,
+      "status": "SCAFFOLDED",
+      "has_dockerfile": false,
+      "has_k8s": true,
+      "has_tests": false,
+      "test_framework": null
+    },
+    {
+      "name": "vmc-english",
+      "language": "Python",
+      "port": 50057,
+      "metrics_port": 9090,
+      "status": "PARTIALLY IMPLEMENTED / VALIDATED WITH MOCK RUNTIME",
+      "has_dockerfile": true,
+      "has_k8s": true,
+      "has_tests": true,
+      "test_framework": "pytest (30 tests passed)"
+    }
+  ],
+  "vms": [
+    {
+      "vm_id": "VM1_LID",
+      "purpose": "Central Language Identification & LACR",
+      "service": "vmc-lid",
+      "port": 50051,
+      "model": "onecxi/open-vakgyata (ONNX) + XLS-R 300M (PyTorch backbone)",
+      "runtime": "ONNX Runtime (CPUExecutionProvider)",
+      "status": "IMPLEMENTED + VALIDATED"
+    },
+    {
+      "vm_id": "VM2_SOUTH",
+      "purpose": "Dravidian Deepfake Detection (Telugu, Tamil, Malayalam, Kannada)",
+      "service": "vmc-south",
+      "port": 50052,
+      "model": "voiceshield-aasist-south (PLANNED)",
+      "runtime": "None (Mock response)",
+      "status": "SCAFFOLDED"
+    },
+    {
+      "vm_id": "VM3_NORTH",
+      "purpose": "North Indic Deepfake Detection (Hindi, Marathi, Sanskrit)",
+      "service": "vmc-north",
+      "port": 50053,
+      "model": "voiceshield-aasist-north (PLANNED)",
+      "runtime": "None (Mock response)",
+      "status": "SCAFFOLDED"
+    },
+    {
+      "vm_id": "VM4_EAST",
+      "purpose": "East Indic Deepfake Detection (Bengali, Assamese, Odia, Bishnupriya Manipuri)",
+      "service": "vmc-east",
+      "port": 50054,
+      "model": "voiceshield-aasist-east (PLANNED)",
+      "runtime": "None (Mock response)",
+      "status": "SCAFFOLDED"
+    },
+    {
+      "vm_id": "VM5_NORTH_WEST_FRONTIER",
+      "purpose": "North-West/Frontier Deepfake Detection (Punjabi, Kashmiri, Sindhi, Urdu)",
+      "service": "vmc-frontier",
+      "port": 50055,
+      "model": "voiceshield-aasist-frontier (PLANNED)",
+      "runtime": "None (Mock response)",
+      "status": "SCAFFOLDED"
+    },
+    {
+      "vm_id": "VM6_WEST",
+      "purpose": "West Indic Deepfake Detection (Gujarati, Rajasthani, Kutchi)",
+      "service": "vmc-west",
+      "port": 50056,
+      "model": "voiceshield-aasist-west (PLANNED)",
+      "runtime": "None (Mock response)",
+      "status": "SCAFFOLDED"
+    },
+    {
+      "vm_id": "VM7_ENGLISH",
+      "purpose": "English Deepfake Detection (AASIST-L)",
+      "service": "vmc-english",
+      "port": 50057,
+      "model": "SpeechAntiSpoofingBenchmarks/AASIST-L (ONNX)",
+      "runtime": "ONNX Runtime (CPUExecutionProvider)",
+      "status": "PARTIALLY IMPLEMENTED (UNCALIBRATED)"
+    }
+  ],
+  "models": [
+    {
+      "id": "open-vakgyata",
+      "role": "END_TO_END",
+      "task": "LID",
+      "architecture": "WAV2VEC2-LID",
+      "parameters": 58746794,
+      "framework": "onnx",
+      "status": "BENCHMARK / ACTIVE IN LID",
+      "artifact_present": true,
+      "file_path": "models/open-vakgyata/f2754058e485dfc65cc62589b8d0e21c1d328399/model.onnx",
+      "file_size_bytes": 235086936,
+      "sha256": "c4cc68450a7e571c21acb6928553f5cbba3e5f136d554210c07f5fbbe37d1d79"
+    },
+    {
+      "id": "facebook-wav2vec2-xls-r-300m",
+      "role": "BACKBONE",
+      "task": "SPEECH_ENCODER",
+      "architecture": "WAV2VEC2-XLS-R",
+      "parameters": 317374720,
+      "framework": "transformers-pytorch",
+      "status": "ACTIVE (BACKBONE ONLY)",
+      "artifact_present": true,
+      "file_path": "models/huggingface/facebook/wav2vec2-xls-r-300m/1a640f32ac3e39899438a2931f9924c02f080a54/pytorch_model.bin",
+      "file_size_bytes": 1269737156,
+      "sha256": "d5e490574712ad0a6736923b9ed11d4cd51c78609c36205f704fc4e87b11d2e0"
+    },
+    {
+      "id": "voiceshield-aasist-english",
+      "role": "DETECTOR",
+      "task": "DEEPFAKE_DETECTION",
+      "architecture": "AASIST-L",
+      "parameters": 85306,
+      "framework": "onnx",
+      "status": "ACTIVE / UNCALIBRATED",
+      "artifact_present": true,
+      "file_path": "model-cache/voiceshield-aasist-english/v1.0.0/model.onnx",
+      "file_size_bytes": 766114,
+      "sha256": "f43f0a638b52846f5d0e630c0a738d10e9306325945127c6f8662d559585f218"
+    },
+    {
+      "id": "voiceshield-lid-primary",
+      "role": "CANDIDATE",
+      "task": "LID",
+      "architecture": "WAV2VEC2-XLS-R",
+      "parameters": 315000000,
+      "framework": "onnx",
+      "status": "CANDIDATE (NO ARTIFACT)",
+      "artifact_present": false,
+      "file_path": null,
+      "file_size_bytes": 0,
+      "sha256": null
+    },
+    {
+      "id": "voiceshield-aasist-south",
+      "role": "DETECTOR",
+      "task": "DEEPFAKE_DETECTION",
+      "architecture": "MULTILINGUAL_AASIST_L",
+      "parameters": null,
+      "framework": "pytorch/onnx",
+      "status": "PLANNED (NO ARTIFACT)",
+      "artifact_present": false,
+      "file_path": null,
+      "file_size_bytes": 0,
+      "sha256": null
+    },
+    {
+      "id": "voiceshield-aasist-north",
+      "role": "DETECTOR",
+      "task": "DEEPFAKE_DETECTION",
+      "architecture": "MULTILINGUAL_AASIST_L",
+      "parameters": null,
+      "framework": "pytorch/onnx",
+      "status": "PLANNED (NO ARTIFACT)",
+      "artifact_present": false,
+      "file_path": null,
+      "file_size_bytes": 0,
+      "sha256": null
+    },
+    {
+      "id": "voiceshield-aasist-east",
+      "role": "DETECTOR",
+      "task": "DEEPFAKE_DETECTION",
+      "architecture": "MULTILINGUAL_AASIST_L",
+      "parameters": null,
+      "framework": "pytorch/onnx",
+      "status": "PLANNED (NO ARTIFACT)",
+      "artifact_present": false,
+      "file_path": null,
+      "file_size_bytes": 0,
+      "sha256": null
+    },
+    {
+      "id": "voiceshield-aasist-frontier",
+      "role": "DETECTOR",
+      "task": "DEEPFAKE_DETECTION",
+      "architecture": "MULTILINGUAL_AASIST_L",
+      "parameters": null,
+      "framework": "pytorch/onnx",
+      "status": "PLANNED (NO ARTIFACT)",
+      "artifact_present": false,
+      "file_path": null,
+      "file_size_bytes": 0,
+      "sha256": null
+    },
+    {
+      "id": "voiceshield-aasist-west",
+      "role": "DETECTOR",
+      "task": "DEEPFAKE_DETECTION",
+      "architecture": "MULTILINGUAL_AASIST_L",
+      "parameters": null,
+      "framework": "pytorch/onnx",
+      "status": "PLANNED (NO ARTIFACT)",
+      "artifact_present": false,
+      "file_path": null,
+      "file_size_bytes": 0,
+      "sha256": null
+    },
+    {
+      "id": "Qwen2.5-7B-Instruct",
+      "role": "LLM_REPRESENTATION",
+      "task": "TEXT_ANALYSIS",
+      "architecture": "Qwen2ForCausalLM",
+      "parameters": 7615616512,
+      "framework": "safetensors",
+      "status": "INCOMPLETE DOWNLOAD (Weights missing, tokenizer & configs only)",
+      "artifact_present": false,
+      "file_path": "models/llm/Qwen2.5-7B-Instruct/",
+      "file_size_bytes": 11500000,
+      "sha256": null
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "Open-Vakgyata ONNX",
+      "type": "REAL_MODEL",
+      "path": "models/open-vakgyata/f2754058e485dfc65cc62589b8d0e21c1d328399/model.onnx",
+      "size_bytes": 235086936,
+      "sha256": "c4cc68450a7e571c21acb6928553f5cbba3e5f136d554210c07f5fbbe37d1d79",
+      "verified_loadable": true
+    },
+    {
+      "name": "XLS-R 300M PyTorch Weights",
+      "type": "REAL_MODEL_BACKBONE",
+      "path": "models/huggingface/facebook/wav2vec2-xls-r-300m/1a640f32ac3e39899438a2931f9924c02f080a54/pytorch_model.bin",
+      "size_bytes": 1269737156,
+      "sha256": "d5e490574712ad0a6736923b9ed11d4cd51c78609c36205f704fc4e87b11d2e0",
+      "verified_loadable": true
+    },
+    {
+      "name": "AASIST-L English ONNX",
+      "type": "REAL_MODEL",
+      "path": "model-cache/voiceshield-aasist-english/v1.0.0/model.onnx",
+      "size_bytes": 766114,
+      "sha256": "f43f0a638b52846f5d0e630c0a738d10e9306325945127c6f8662d559585f218",
+      "verified_loadable": true
+    }
+  ],
+  "grpc": [
+    {
+      "service": "cloudforge.reference.v1.ReferenceService",
+      "proto": "proto/cloudforge/reference/v1/reference.proto",
+      "methods": ["GetStatus"],
+      "port": 50051,
+      "server_file": "services/cloudforge-reference/internal/server/server.go",
+      "client_file": "services/cloudforge-reference/cmd/client/main.go",
+      "testing_state": "REAL_LOCALHOST_NETWORK_GRPC"
+    },
+    {
+      "service": "vmc.lid.v1.LIDService",
+      "proto": "proto/vmc/lid/v1/lid.proto",
+      "methods": ["IdentifyLanguage", "GetModelInfo", "GetSupportedLanguages", "ResolveLanguageGroup"],
+      "port": 50051,
+      "server_file": "services/vmc-lid/src/server/grpc_server.py",
+      "client_file": "services/vmc-lid/tools/client.py",
+      "testing_state": "REAL_LOCALHOST_NETWORK_GRPC"
+    },
+    {
+      "service": "vmc.detector.v1.DetectorService (VM7_ENGLISH)",
+      "proto": "proto/vmc/detector/v1/detector.proto",
+      "methods": ["DetectSpoof", "GetDetectorInfo"],
+      "port": 50057,
+      "server_file": "services/vmc-english/src/server/grpc_server.py",
+      "client_file": null,
+      "testing_state": "MOCKED_GRPC_IN_TESTS"
+    },
+    {
+      "service": "vmc.detector.v1.DetectorService (VM2..VM6)",
+      "proto": "proto/vmc/detector/v1/detector.proto",
+      "methods": ["DetectSpoof", "GetDetectorInfo"],
+      "port": "50052-50056",
+      "server_file": null,
+      "client_file": null,
+      "testing_state": "SCAFFOLDED_SERVICER_ONLY"
+    }
+  ],
+  "datasets": [
+    {
+      "name": "Multilingual Dataset",
+      "path": "C:\\Users\\yuvat\\Music\\Multilingual Dataset",
+      "samples": 33737,
+      "duration_hours": 62.59,
+      "languages_present": 16,
+      "canonical_languages_present": 12,
+      "missing_canonical_languages": ["pa-IN", "ks-IN", "sd-IN", "ur-IN", "raj-IN", "kut-IN", "bpy-IN"],
+      "manifest_path": "reports/multilingual_dataset_manifest.json"
+    },
+    {
+      "name": "Deepfake Dataset",
+      "path": "C:\\Users\\yuvat\\Music\\Deepfake Dataset",
+      "samples": 12000,
+      "duration_hours": 13.33,
+      "categories": ["fake_voice_fake_bg_wf_4s", "fake_voice_real_bg_wf_4s", "real_voice_fake_bg_wf_4s", "real_voice_real_bg_wf_4s"],
+      "manifest_path": "reports/deepfake_dataset_manifest.json"
+    },
+    {
+      "name": "WaveFake Dataset",
+      "path": "C:\\Users\\yuvat\\Downloads\\sources_wavefake\\_sources_wavefake",
+      "samples": 2007,
+      "duration_hours": 4.0,
+      "manifest_path": "reports/wavefake/dataset_manifest.json"
+    }
+  ],
+  "tests": [
+    {
+      "suite": "VMC-LID Unit & Integration",
+      "command": "python -m pytest services/vmc-lid/tests -v",
+      "total_tests": 92,
+      "passed": 92,
+      "failed": 0,
+      "execution_type": "Unit & Local In-Process/Localhost gRPC",
+      "real_inference": true
+    },
+    {
+      "suite": "VMC-English Unit & Integration",
+      "command": "python -m pytest services/vmc-english/tests -v",
+      "total_tests": 30,
+      "passed": 30,
+      "failed": 0,
+      "execution_type": "Unit & Local Mock Runtime gRPC",
+      "real_inference": false
+    },
+    {
+      "suite": "CloudForge Reference Go Tests",
+      "command": "go test -v ./...",
+      "total_tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "execution_type": "Unit & Localhost Network gRPC",
+      "real_inference": false
+    }
+  ],
+  "deployment": {
+    "status": "LOCAL ONLY",
+    "docker_images_buildable": ["cloudforge/cloudforge-reference:v1.0.0", "cloudforge/vmc-lid:v1.0.0", "cloudforge/vmc-english:v1.0.0"],
+    "k8s_manifests_present": ["cloudforge-reference", "vmc-lid", "vmc-english", "vmc-south", "vmc-north", "vmc-east", "vmc-frontier", "vmc-west"],
+    "cloud_deployment_status": "NOT DEPLOYED (Zero AWS/EKS/GCP live deployment infrastructure in repo)"
+  },
+  "observability": {
+    "status": "IMPLEMENTED + VALIDATED",
+    "metrics_engine": "Prometheus Client (Python / Go)",
+    "http_port": 9090,
+    "endpoints": ["/metrics", "/healthz"],
+    "custom_metrics": [
+      "cloudforge_grpc_requests_total",
+      "cloudforge_grpc_request_duration_seconds",
+      "cloudforge_grpc_errors_total",
+      "cloudforge_service_info",
+      "cloudforge_service_health_status",
+      "cloudforge_ml_inference_duration_seconds",
+      "lid_inference_total",
+      "lid_inference_latency",
+      "lid_low_confidence_total"
+    ]
+  },
+  "security": {
+    "non_root_uid_gid": "65532:65532",
+    "k8s_security_context": "readOnlyRootFilesystem: true, drop: [ALL], runAsNonRoot: true",
+    "audio_payload_logging": "REDACTED (Zero raw audio in logs)",
+    "grpc_payload_limit_mb": 32,
+    "model_artifact_integrity": "SHA-256 Bit-Exact Verification Enforced",
+    "auth_tls_mtls": "NOT IMPLEMENTED (Plaintext insecure gRPC inside cluster)"
+  },
+  "verified_working": [
+    "Audio format validation & ingestion (16-bit PCM LE, WAV headers, mono/stereo conversion)",
+    "Polyphase sinc audio resampling (8k/16k/22.05k/44.1k/48k -> 16k) and z-score normalization",
+    "VM1 Open-Vakgyata 10-class LID ONNX inference (~97.6ms P50 latency)",
+    "Canonical 19-language O(1) routing resolver with exact ISO standardization (kut-IN)",
+    "LACR session tracking & temporal checkpointing (checkpoint_interval=5)",
+    "XLS-R 300M 1024-dim masked mean-pooling speech representation extraction",
+    "VM7 AASIST-L ONNX model loading and forward pass ([batch, 64600] -> [batch, 2])",
+    "Model Registry (models/registry.json) with SHA-256 artifact verification",
+    "Prometheus metrics HTTP server on port 9090 (/metrics, /healthz)",
+    "Standalone localhost gRPC server & client for VM1 (vmc-lid) and cloudforge-reference",
+    "Comprehensive automated test suites (92 vmc-lid + 30 vmc-english + 6 reference = 128 tests passing)"
+  ],
+  "partial": [
+    "VM7 English Deepfake Service (code and ONNX model exist, but threshold is default 0.50 uncalibrated, and test suite uses mock runtime)",
+    "DSR / XLS-R 300M Integration (backbone representation works, but 19-class classification head is completely missing)",
+    "Kubernetes workload manifests (manifests exist for 8 workloads, but regional VMs 2-6 lack Dockerfiles and server entrypoints)"
+  ],
+  "scaffolded": [
+    "VM2_SOUTH Detector Service (services/vmc-south/src/service/detector_service.py - returns hardcoded dummy scores)",
+    "VM3_NORTH Detector Service (services/vmc-north/src/service/detector_service.py - returns hardcoded dummy scores)",
+    "VM4_EAST Detector Service (services/vmc-east/src/service/detector_service.py - returns hardcoded dummy scores)",
+    "VM5_NORTH_WEST_FRONTIER Detector Service (services/vmc-frontier/src/service/detector_service.py - returns hardcoded dummy scores)",
+    "VM6_WEST Detector Service (services/vmc-west/src/service/detector_service.py - returns hardcoded dummy scores)",
+    "Distributed gRPC mesh (no inter-VM RPC routing or distributed call aggregation exists)"
+  ],
+  "blocked": [
+    "19-Language LID Inference on XLS-R (BLOCKED by missing trained 19-class classification head)",
+    "Regional Indic Deepfake Detection on VM2-VM6 (BLOCKED by missing multilingual AASIST-L models)",
+    "VM7 AASIST-L Production Decisioning (BLOCKED by lack of empirical threshold calibration on benchmark datasets)"
+  ],
+  "planned": [
+    "RIAS (Risk Identification & Assessment System)",
+    "TCED (Threat/Call Evaluation & Decision Engine)",
+    "Final Android Application Reporting Contract & Protocol",
+    "Realtime Audio Streaming Gateway / Orchestrator",
+    "mTLS / gRPC Authentication Layer",
+    "Automated Speech Recognition (VMC-ASR)",
+    "Voice Biometrics & Identity (VMC-IDENTITY)"
+  ],
+  "critical_gaps": [
+    "1. Complete absence of RIAS (Risk Identification & Assessment System) in code, proto, and models.",
+    "2. Complete absence of TCED (Threat/Call Evaluation & Decision Engine) to fuse LID, Deepfake, and Risk signals.",
+    "3. No API Gateway or Orchestrator service to fan-out audio to LID, DSR, and RIAS concurrently and aggregate results.",
+    "4. Regional detector VMs (VM2-VM6) are non-executable scaffolds without models, entrypoints, or Dockerfiles.",
+    "5. Missing 19-language LID classification head on XLS-R 300M (currently limited to 10-class Open-Vakgyata benchmark).",
+    "6. VM7 AASIST-L threshold is uncalibrated (calibrated: false), with no empirical operating point determined on real datasets.",
+    "7. Missing final Android response schema / contract."
+  ],
+  "rias_readiness": {
+    "is_ready_to_begin": true,
+    "foundation_available": [
+      "Standardized Protobuf governance and protoc generation scripts (proto/, scripts/gen-proto.ps1)",
+      "Audio preprocessing library (16kHz PCM/WAV conversion, bandlimited resampling)",
+      "Model Registry and Artifact Resolver architecture with SHA-256 integrity verification",
+      "Telemetry standard with Prometheus exporters on port 9090 and structured JSON logging",
+      "Kubernetes non-root security standards (65532:65532, readOnlyRootFilesystem)"
+    ],
+    "what_rias_interfaces_can_reuse": [
+      "AudioProcessor (core/audio_processor.py) for incoming audio chunk preprocessing",
+      "ArtifactResolver (core/artifact_resolver.py) for local/HF model weight hydration",
+      "Telemetry modules (telemetry/logging.py, telemetry/metrics.py)",
+      "gRPC server scaffolding and health/readiness server implementations"
+    ],
+    "what_rias_interfaces_are_missing": [
+      "proto/vmc/risk/v1/risk.proto (Risk analysis request/response definitions)",
+      "RIAS service implementation (services/vmc-risk/)",
+      "Risk taxonomy, fraud intent categories, and confidence scoring engines",
+      "ASR / Transcript generation or acoustic risk feature extraction interface"
+    ],
+    "what_rias_should_not_duplicate": [
+      "Do NOT implement LID or language classification (owned by VM1_LID)",
+      "Do NOT implement Deepfake/spoof voice detection (owned by VM2-VM7)",
+      "Do NOT make RIAS sequentially dependent on AASIST-L (must run in parallel from raw audio/transcription)"
+    ],
+    "what_rias_should_consume": [
+      "Raw audio stream / chunks (PCM/WAV) and/or decoded conversational transcripts",
+      "Call session metadata (caller ID, call duration, chunk sequence index, caller history)"
+    ],
+    "what_rias_should_produce": [
+      "Risk score [0.0 - 1.0], risk category (e.g., URGENCY_SCAM, OTP_THEFT, IMPERSONATION, EXTORTION), severity level, risk indicators, and explanation tags"
+    ],
+    "what_tced_should_consume_from_rias": [
+      "RIAS risk score, fraud category, and severity level combined with LID language/group and Deepfake spoof score"
+    ],
+    "contracts_to_define_before_implementation": [
+      "1. proto/vmc/risk/v1/risk.proto: Define AnalyzeRisk RPC, RiskAssessmentRequest, RiskAssessmentResponse",
+      "2. proto/voiceshield/tced/v1/tced.proto: Define EvaluateCall RPC, ThreatDecisionRequest, ThreatDecisionResponse",
+      "3. proto/voiceshield/report/v1/report.proto: Define Final Android app report payload"
+    ]
+  }
+}

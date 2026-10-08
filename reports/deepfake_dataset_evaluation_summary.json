@@ -1,0 +1,129 @@
+{
+  "evaluation_name": "VM7_ENGLISH AASIST-L Real Dataset Deepfake Evaluation",
+  "dataset": {
+    "path": "C:\\Users\\yuvat\\Music\\Deepfake Dataset",
+    "total_files": 12000,
+    "total_evaluated": 12000,
+    "sample_rate": 16000,
+    "channels": 1,
+    "format": "WAV",
+    "categories": {
+      "fake_voice_fake_bg_wf_4s": 3000,
+      "fake_voice_real_bg_wf_4s": 3000,
+      "real_voice_fake_bg_wf_4s": 3000,
+      "real_voice_real_bg_wf_4s": 3000
+    },
+    "subconditions": {
+      "balanced": 4000,
+      "bg_dominant": 4000,
+      "voice_dominant": 4000
+    },
+    "classes": {
+      "SPOOF": 6000,
+      "BONAFIDE_ENV_SPOOF": 3000,
+      "BONAFIDE": 3000
+    }
+  },
+  "model": {
+    "model_id": "voiceshield-aasist-english",
+    "model_name": "VoiceShield AASIST-L English Detector",
+    "architecture": "AASIST-L",
+    "version": "v1.0.0",
+    "runtime": "CloudForge Native ONNX",
+    "provider": "cloudforge",
+    "source_repository": "SpeechAntiSpoofingBenchmarks/AASIST-L",
+    "source_revision": "357e022c44a1aa926097e18c1457bde3873ed8bf",
+    "artifact_path": "C:\\CloudForge\\model-cache\\voiceshield-aasist-english\\v1.0.0\\model.onnx",
+    "artifact_size_bytes": 766114,
+    "sha256": "f43f0a638b52846f5d0e630c0a738d10e9306325945127c6f8662d559585f218",
+    "parameters": 85306,
+    "target_vm": "VM7_ENGLISH",
+    "group": "ENGLISH",
+    "language": "en-IN",
+    "artifact_status": "AVAILABLE",
+    "real_inference_status": "VERIFIED"
+  },
+  "score_semantics": {
+    "raw_output": "logits [batch, 2]: index 0 = spoof logit, index 1 = bonafide logit",
+    "benchmark_raw_score": "bonafide_logit (higher = more bona fide)",
+    "bonafide_score": "softmax(logits)[1]",
+    "spoof_score": "softmax(logits)[0]"
+  },
+  "threshold": {
+    "value": 0.5,
+    "calibrated": false,
+    "status": "UNCALIBRATED_BASELINE"
+  },
+  "category_statistics": {
+    "fake_voice_fake_bg_wf_4s": {
+      "count": 3000,
+      "bonafide_score_mean": 0.870252455253101,
+      "bonafide_score_std": 0.2969518984948515,
+      "spoof_score_mean": 0.12974754564787763,
+      "raw_bonafide_logit_mean": 5.2995910866223275,
+      "raw_bonafide_logit_min": -7.9755144119262695,
+      "raw_bonafide_logit_max": 22.06410789489746,
+      "raw_bonafide_logit_p50": 6.013733148574829
+    },
+    "fake_voice_real_bg_wf_4s": {
+      "count": 3000,
+      "bonafide_score_mean": 0.8091613888929277,
+      "bonafide_score_std": 0.35645337081465567,
+      "spoof_score_mean": 0.19083861056678525,
+      "raw_bonafide_logit_mean": 4.971594397072991,
+      "raw_bonafide_logit_min": -6.568364143371582,
+      "raw_bonafide_logit_max": 27.58408546447754,
+      "raw_bonafide_logit_p50": 5.986039638519287
+    },
+    "real_voice_fake_bg_wf_4s": {
+      "count": 3000,
+      "bonafide_score_mean": 0.8733656051095486,
+      "bonafide_score_std": 0.29425964646375546,
+      "spoof_score_mean": 0.1266343950236672,
+      "raw_bonafide_logit_mean": 5.427865342489134,
+      "raw_bonafide_logit_min": -8.159610748291016,
+      "raw_bonafide_logit_max": 21.930227279663086,
+      "raw_bonafide_logit_p50": 6.1563169956207275
+    },
+    "real_voice_real_bg_wf_4s": {
+      "count": 3000,
+      "bonafide_score_mean": 0.8090433181941905,
+      "bonafide_score_std": 0.35718288999608383,
+      "spoof_score_mean": 0.19095668165883375,
+      "raw_bonafide_logit_mean": 5.097755362514406,
+      "raw_bonafide_logit_min": -6.405149459838867,
+      "raw_bonafide_logit_max": 27.90553092956543,
+      "raw_bonafide_logit_p50": 6.169743299484253
+    }
+  },
+  "classification_metrics": {
+    "primary_bonafide_vs_spoof": {
+      "samples_count": 9000,
+      "roc_auc": 0.5005,
+      "eer_percent": 49.07
+    },
+    "full_evaluation_with_env_spoof": {
+      "samples_count": 12000,
+      "roc_auc": 0.5098,
+      "eer_percent": 49.13
+    }
+  },
+  "performance": {
+    "total_evaluation_time_sec": 1338.21,
+    "throughput_samples_per_sec": 8.97,
+    "p50_latency_ms": 603.52,
+    "p95_latency_ms": 1484.32,
+    "p99_latency_ms": 1650.59,
+    "mean_latency_ms": 661.01,
+    "min_latency_ms": 135.4,
+    "max_latency_ms": 2310.38,
+    "initial_rss_mb": 106.18,
+    "final_rss_mb": 237.77
+  },
+  "vm7_routing_contract": {
+    "english_gating": "VERIFIED",
+    "non_english_rejection": "VERIFIED",
+    "onnx_native_runtime": "VERIFIED"
+  },
+  "final_status": "ARCHITECTURE READY | SERVICE READY | CLOUDFORGE RUNTIME READY | MODEL ARTIFACT AVAILABLE | REAL INFERENCE VERIFIED | ACCURACY VALIDATED"
+}

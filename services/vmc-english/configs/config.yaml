@@ -1,0 +1,34 @@
+# CloudForge VMC-ENGLISH Service Configuration (VM7 — English AASIST-L Detector)
+service:
+  name: "vmc-english"
+  version: "v2.0.0"
+  platform: "cloudforge"
+  environment: "development"
+  target_vm: "VM7_ENGLISH"
+  group: "ENGLISH"
+  language: "en-IN"
+
+server:
+  grpc_port: 50057
+  metrics_port: 9090
+  metrics_enabled: true
+  max_recv_msg_size_mb: 32
+  max_send_msg_size_mb: 32
+  graceful_timeout_seconds: 5
+
+runtime:
+  execution_provider: "CPUExecutionProvider"
+  num_threads: 4
+
+detector:
+  model_id: "voiceshield-aasist-english"
+  model_name: "VoiceShield AASIST-L English Detector"
+  model_version: "v1.0.0"
+  model_type: "AASIST-L"
+  artifact_filename: "model.onnx"
+  model_cache_dir: "C:/CloudForge/model-cache"
+  supported_languages:
+    - "en-IN"
+  threshold:
+    value: 0.50
+    calibrated: false

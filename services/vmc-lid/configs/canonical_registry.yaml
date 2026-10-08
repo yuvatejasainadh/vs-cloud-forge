@@ -1,0 +1,254 @@
+# CloudForge V2 Canonical VoiceShield 7-VM Language & Routing Registry
+# Authoritative single source of truth for 19 canonical languages and 7 VMs.
+version: "2.0.0"
+
+default_group: "UNKNOWN_GROUP"
+default_vm: "VM1_LID"
+
+# 19 Canonical Languages
+languages:
+  # VM2 — South Indian Group (4 languages)
+  te-IN:
+    name: "Telugu"
+    native_name: "తెలుగు"
+    family: "Dravidian"
+    group: "SOUTH"
+    vm: "VM2_SOUTH"
+
+  ta-IN:
+    name: "Tamil"
+    native_name: "தமிழ்"
+    family: "Dravidian"
+    group: "SOUTH"
+    vm: "VM2_SOUTH"
+
+  ml-IN:
+    name: "Malayalam"
+    native_name: "മലയാളം"
+    family: "Dravidian"
+    group: "SOUTH"
+    vm: "VM2_SOUTH"
+
+  kn-IN:
+    name: "Kannada"
+    native_name: "ಕನ್ನಡ"
+    family: "Dravidian"
+    group: "SOUTH"
+    vm: "VM2_SOUTH"
+
+  # VM3 — North Indian Group (3 languages)
+  hi-IN:
+    name: "Hindi"
+    native_name: "हिन्दी"
+    family: "Indo-Aryan"
+    group: "NORTH"
+    vm: "VM3_NORTH"
+
+  mr-IN:
+    name: "Marathi"
+    native_name: "मराठी"
+    family: "Indo-Aryan"
+    group: "NORTH"
+    vm: "VM3_NORTH"
+
+  sa-IN:
+    name: "Sanskrit"
+    native_name: "संस्कृतम्"
+    family: "Indo-Aryan"
+    group: "NORTH"
+    vm: "VM3_NORTH"
+
+  # VM4 — East Indian Group (4 languages)
+  bn-IN:
+    name: "Bengali"
+    native_name: "বাংলা"
+    family: "Indo-Aryan"
+    group: "EAST"
+    vm: "VM4_EAST"
+
+  as-IN:
+    name: "Assamese"
+    native_name: "অসমীয়া"
+    family: "Indo-Aryan"
+    group: "EAST"
+    vm: "VM4_EAST"
+
+  or-IN:
+    name: "Odia"
+    native_name: "ଓଡ଼ିଆ"
+    family: "Indo-Aryan"
+    group: "EAST"
+    vm: "VM4_EAST"
+
+  bpy-IN:
+    name: "Bishnupriya Manipuri"
+    native_name: "বিষ্ণুপ্রিয়া মণিপুরী"
+    family: "Indo-Aryan"
+    group: "EAST"
+    vm: "VM4_EAST"
+
+  # VM5 — North-West / Frontier Group (4 languages)
+  pa-IN:
+    name: "Punjabi"
+    native_name: "ਪੰਜਾਬੀ"
+    family: "Indo-Aryan"
+    group: "NORTH_WEST_FRONTIER"
+    vm: "VM5_NORTH_WEST_FRONTIER"
+
+  ks-IN:
+    name: "Kashmiri"
+    native_name: "कॉशुर"
+    family: "Dardic / Indo-Aryan"
+    group: "NORTH_WEST_FRONTIER"
+    vm: "VM5_NORTH_WEST_FRONTIER"
+
+  sd-IN:
+    name: "Sindhi"
+    native_name: "سنڌي / सिन्धी"
+    family: "Indo-Aryan"
+    group: "NORTH_WEST_FRONTIER"
+    vm: "VM5_NORTH_WEST_FRONTIER"
+
+  ur-IN:
+    name: "Urdu"
+    native_name: "اردو"
+    family: "Indo-Aryan"
+    group: "NORTH_WEST_FRONTIER"
+    vm: "VM5_NORTH_WEST_FRONTIER"
+
+  # VM6 — West Indian Group (3 languages)
+  gu-IN:
+    name: "Gujarati"
+    native_name: "ગુજરાતી"
+    family: "Indo-Aryan"
+    group: "WEST"
+    vm: "VM6_WEST"
+
+  raj-IN:
+    name: "Rajasthani"
+    native_name: "राजस्थानी"
+    family: "Indo-Aryan"
+    group: "WEST"
+    vm: "VM6_WEST"
+
+  kut-IN:
+    name: "Kutchi"
+    native_name: "કચ્છી / کچھی"
+    family: "Indo-Aryan"
+    group: "WEST"
+    vm: "VM6_WEST"
+
+  # VM7 — English Detector (1 language)
+  en-IN:
+    name: "English"
+    native_name: "English (India)"
+    family: "Germanic"
+    group: "ENGLISH"
+    vm: "VM7_ENGLISH"
+
+# Canonical Groups & VM Assignments
+groups:
+  SOUTH:
+    vm: "VM2_SOUTH"
+    name: "South Indian Group"
+    description: "Dravidian language family detector cluster"
+    languages:
+      - te-IN
+      - ta-IN
+      - ml-IN
+      - kn-IN
+
+  NORTH:
+    vm: "VM3_NORTH"
+    name: "North Indian Group"
+    description: "Central & Northern Indo-Aryan detector cluster"
+    languages:
+      - hi-IN
+      - mr-IN
+      - sa-IN
+
+  EAST:
+    vm: "VM4_EAST"
+    name: "East Indian Group"
+    description: "Eastern Indo-Aryan detector cluster"
+    languages:
+      - bn-IN
+      - as-IN
+      - or-IN
+      - bpy-IN
+
+  NORTH_WEST_FRONTIER:
+    vm: "VM5_NORTH_WEST_FRONTIER"
+    name: "North-West / Frontier Group"
+    description: "North-Western Indo-Aryan & Dardic detector cluster"
+    languages:
+      - pa-IN
+      - ks-IN
+      - sd-IN
+      - ur-IN
+
+  WEST:
+    vm: "VM6_WEST"
+    name: "West Indian Group"
+    description: "Western Indo-Aryan detector cluster"
+    languages:
+      - gu-IN
+      - raj-IN
+      - kut-IN
+
+  ENGLISH:
+    vm: "VM7_ENGLISH"
+    name: "English"
+    description: "Azure-hosted original AASIST-L English deepfake detector"
+    languages:
+      - en-IN
+
+# VM Topology Metadata
+vms:
+  VM1_LID:
+    role: "LANGUAGE_IDENTIFICATION"
+    service_name: "vmc-lid"
+    port: 50051
+    status: "ACTIVE"
+
+  VM2_SOUTH:
+    role: "INDIC_DETECTOR"
+    service_name: "vmc-south"
+    port: 50052
+    model_type: "MULTILINGUAL_AASIST_L"
+    status: "PLANNED"
+
+  VM3_NORTH:
+    role: "INDIC_DETECTOR"
+    service_name: "vmc-north"
+    port: 50053
+    model_type: "MULTILINGUAL_AASIST_L"
+    status: "PLANNED"
+
+  VM4_EAST:
+    role: "INDIC_DETECTOR"
+    service_name: "vmc-east"
+    port: 50054
+    model_type: "MULTILINGUAL_AASIST_L"
+    status: "PLANNED"
+
+  VM5_NORTH_WEST_FRONTIER:
+    role: "INDIC_DETECTOR"
+    service_name: "vmc-frontier"
+    port: 50055
+    model_type: "MULTILINGUAL_AASIST_L"
+    status: "PLANNED"
+
+  VM6_WEST:
+    role: "INDIC_DETECTOR"
+    service_name: "vmc-west"
+    port: 50056
+    model_type: "MULTILINGUAL_AASIST_L"
+    status: "PLANNED"
+
+  VM7_ENGLISH:
+    role: "ENGLISH_DETECTOR"
+    service_name: "vmc-english"
+    port: 50057
+    model_type: "AZURE_AASIST_L"
+    status: "PLANNED"

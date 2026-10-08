@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package cloudforge.reference.v1;
+
+option go_package = "cloudforge-reference/gen/reference/v1";
+
+service ReferenceService {
+  rpc GetStatus(StatusRequest) returns (StatusResponse);
+}
+
+message StatusRequest {
+  string service = 1;
+}
+
+message StatusResponse {
+  string service = 1;
+  string status = 2;
+  string version = 3;
+  string platform = 4;
+}

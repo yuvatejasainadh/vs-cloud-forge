@@ -1,0 +1,259 @@
+{
+  "evaluation_name": "VM1_LID 12-Language Real Dataset Routing Pipeline Test",
+  "dataset_manifest": "C:\\CloudForge\\reports\\multilingual_dataset_manifest.json",
+  "total_selected_samples": 25134,
+  "total_excluded_samples": 8603,
+  "selected_languages_count": 12,
+  "selected_languages": [
+    "te-IN",
+    "ta-IN",
+    "ml-IN",
+    "kn-IN",
+    "hi-IN",
+    "mr-IN",
+    "sa-IN",
+    "bn-IN",
+    "as-IN",
+    "or-IN",
+    "gu-IN",
+    "en-IN"
+  ],
+  "excluded_languages": [
+    "Dogri",
+    "Nepali",
+    "Bodo",
+    "Manipuri"
+  ],
+  "samples_per_language": {
+    "as-IN": 2192,
+    "bn-IN": 1978,
+    "kn-IN": 2196,
+    "ml-IN": 2150,
+    "mr-IN": 2191,
+    "sa-IN": 2101,
+    "en-IN": 2200,
+    "te-IN": 2200,
+    "hi-IN": 2200,
+    "or-IN": 1992,
+    "gu-IN": 1619,
+    "ta-IN": 2115
+  },
+  "split_distribution": {
+    "train": 23102,
+    "test": 2032
+  },
+  "model_id": "facebook-wav2vec2-xls-r-300m",
+  "classifier_status": "NOT_AVAILABLE",
+  "lid_prediction_status": "NOT_AVAILABLE",
+  "routing_logic_status": "VERIFIED",
+  "routing_accuracy": 1.0,
+  "routing_failures_count": 0,
+  "canonical_routing_results": [
+    {
+      "language_code": "as-IN",
+      "language_name": "Assamese",
+      "expected_group": "EAST",
+      "resolved_group": "EAST",
+      "expected_vm": "VM4_EAST",
+      "resolved_vm": "VM4_EAST",
+      "service_name": "vmc-east",
+      "port": 50054,
+      "status": "PASS",
+      "latency_us": 1.5
+    },
+    {
+      "language_code": "bn-IN",
+      "language_name": "Bengali",
+      "expected_group": "EAST",
+      "resolved_group": "EAST",
+      "expected_vm": "VM4_EAST",
+      "resolved_vm": "VM4_EAST",
+      "service_name": "vmc-east",
+      "port": 50054,
+      "status": "PASS",
+      "latency_us": 1.0
+    },
+    {
+      "language_code": "en-IN",
+      "language_name": "English",
+      "expected_group": "ENGLISH",
+      "resolved_group": "ENGLISH",
+      "expected_vm": "VM7_ENGLISH",
+      "resolved_vm": "VM7_ENGLISH",
+      "service_name": "vmc-english",
+      "port": 50057,
+      "status": "PASS",
+      "latency_us": 0.5
+    },
+    {
+      "language_code": "gu-IN",
+      "language_name": "Gujarati",
+      "expected_group": "WEST",
+      "resolved_group": "WEST",
+      "expected_vm": "VM6_WEST",
+      "resolved_vm": "VM6_WEST",
+      "service_name": "vmc-west",
+      "port": 50056,
+      "status": "PASS",
+      "latency_us": 0.3
+    },
+    {
+      "language_code": "hi-IN",
+      "language_name": "Hindi",
+      "expected_group": "NORTH",
+      "resolved_group": "NORTH",
+      "expected_vm": "VM3_NORTH",
+      "resolved_vm": "VM3_NORTH",
+      "service_name": "vmc-north",
+      "port": 50053,
+      "status": "PASS",
+      "latency_us": 0.3
+    },
+    {
+      "language_code": "kn-IN",
+      "language_name": "Kannada",
+      "expected_group": "SOUTH",
+      "resolved_group": "SOUTH",
+      "expected_vm": "VM2_SOUTH",
+      "resolved_vm": "VM2_SOUTH",
+      "service_name": "vmc-south",
+      "port": 50052,
+      "status": "PASS",
+      "latency_us": 0.1
+    },
+    {
+      "language_code": "ml-IN",
+      "language_name": "Malayalam",
+      "expected_group": "SOUTH",
+      "resolved_group": "SOUTH",
+      "expected_vm": "VM2_SOUTH",
+      "resolved_vm": "VM2_SOUTH",
+      "service_name": "vmc-south",
+      "port": 50052,
+      "status": "PASS",
+      "latency_us": 0.2
+    },
+    {
+      "language_code": "mr-IN",
+      "language_name": "Marathi",
+      "expected_group": "NORTH",
+      "resolved_group": "NORTH",
+      "expected_vm": "VM3_NORTH",
+      "resolved_vm": "VM3_NORTH",
+      "service_name": "vmc-north",
+      "port": 50053,
+      "status": "PASS",
+      "latency_us": 0.2
+    },
+    {
+      "language_code": "or-IN",
+      "language_name": "Odia",
+      "expected_group": "EAST",
+      "resolved_group": "EAST",
+      "expected_vm": "VM4_EAST",
+      "resolved_vm": "VM4_EAST",
+      "service_name": "vmc-east",
+      "port": 50054,
+      "status": "PASS",
+      "latency_us": 0.1
+    },
+    {
+      "language_code": "sa-IN",
+      "language_name": "Sanskrit",
+      "expected_group": "NORTH",
+      "resolved_group": "NORTH",
+      "expected_vm": "VM3_NORTH",
+      "resolved_vm": "VM3_NORTH",
+      "service_name": "vmc-north",
+      "port": 50053,
+      "status": "PASS",
+      "latency_us": 0.2
+    },
+    {
+      "language_code": "ta-IN",
+      "language_name": "Tamil",
+      "expected_group": "SOUTH",
+      "resolved_group": "SOUTH",
+      "expected_vm": "VM2_SOUTH",
+      "resolved_vm": "VM2_SOUTH",
+      "service_name": "vmc-south",
+      "port": 50052,
+      "status": "PASS",
+      "latency_us": 0.2
+    },
+    {
+      "language_code": "te-IN",
+      "language_name": "Telugu",
+      "expected_group": "SOUTH",
+      "resolved_group": "SOUTH",
+      "expected_vm": "VM2_SOUTH",
+      "resolved_vm": "VM2_SOUTH",
+      "service_name": "vmc-south",
+      "port": 50052,
+      "status": "PASS",
+      "latency_us": 0.1
+    }
+  ],
+  "edge_case_results": [
+    {
+      "input": "brx-IN",
+      "description": "Bodo",
+      "resolved_group": "UNKNOWN_GROUP",
+      "resolved_vm": "VM1_LID",
+      "status": "PASS"
+    },
+    {
+      "input": "doi-IN",
+      "description": "Dogri",
+      "resolved_group": "UNKNOWN_GROUP",
+      "resolved_vm": "VM1_LID",
+      "status": "PASS"
+    },
+    {
+      "input": "nep-IN",
+      "description": "Nepali",
+      "resolved_group": "UNKNOWN_GROUP",
+      "resolved_vm": "VM1_LID",
+      "status": "PASS"
+    },
+    {
+      "input": "kfr-IN",
+      "description": "Old Kutchi tag",
+      "resolved_group": "UNKNOWN_GROUP",
+      "resolved_vm": "VM1_LID",
+      "status": "PASS"
+    },
+    {
+      "input": "UNKNOWN",
+      "description": "Unknown code",
+      "resolved_group": "UNKNOWN_GROUP",
+      "resolved_vm": "VM1_LID",
+      "status": "PASS"
+    },
+    {
+      "input": "",
+      "description": "Empty code",
+      "resolved_group": "UNKNOWN_GROUP",
+      "resolved_vm": "VM1_LID",
+      "status": "PASS"
+    },
+    {
+      "input": "xyz-123",
+      "description": "Invalid string",
+      "resolved_group": "UNKNOWN_GROUP",
+      "resolved_vm": "VM1_LID",
+      "status": "PASS"
+    }
+  ],
+  "performance": {
+    "p50_preprocessing_ms": 1.191,
+    "p95_preprocessing_ms": 2.352,
+    "p50_routing_us": 0.2,
+    "p95_routing_us": 1.22,
+    "p50_e2e_pipeline_ms": 1.79,
+    "p95_e2e_pipeline_ms": 3.63,
+    "p99_e2e_pipeline_ms": 4.07,
+    "process_rss_mb": 154.6
+  },
+  "final_status": "ROUTING LOGIC VERIFIED \u2014 LID CLASSIFIER NOT AVAILABLE"
+}

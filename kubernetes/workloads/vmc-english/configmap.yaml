@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vmc-english-config
+  namespace: ml-platform
+  labels:
+    app.kubernetes.io/name: vmc-english
+    app.kubernetes.io/part-of: cloudforge
+data:
+  AASIST_MODEL_ID: "voiceshield-aasist-english"
+  AASIST_MODEL_VERSION: "v1.0.0"
+  AASIST_THRESHOLD: "0.50"
+  AASIST_EXECUTION_PROVIDER: "CPUExecutionProvider"

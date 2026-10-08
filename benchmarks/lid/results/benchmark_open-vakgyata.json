@@ -1,0 +1,27 @@
+{
+  "model_id": "open-vakgyata",
+  "model_version": "f2754058e485dfc65cc62589b8d0e21c1d328399",
+  "parameters": 58746794,
+  "iterations": 30,
+  "total_elapsed_sec": 4.237,
+  "throughput_inf_per_sec": 7.08,
+  "latency_ms": {
+    "p50": 139.48,
+    "p95": 154.09,
+    "p99": 168.32,
+    "mean": 141.24,
+    "min": 131.97,
+    "max": 173.62
+  },
+  "engine_latency_ms": {
+    "mean": 141.23,
+    "p95": 154.08
+  },
+  "memory_mb": {
+    "model_rss_delta": 233.59,
+    "total_rss": 351.14
+  },
+  "supported_languages_count": 10,
+  "canonical_coverage_pct": 52.6,
+  "timestamp": "2026-10-06T15:18:21Z"
+}

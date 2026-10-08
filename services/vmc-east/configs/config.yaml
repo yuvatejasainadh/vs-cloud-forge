@@ -1,0 +1,18 @@
+service:
+  name: vmc-east
+  target_vm: VM4_EAST
+  group: EAST
+  version: v1.0.0-scaffold
+  status: PLANNED
+server:
+  grpc_port: 50054
+  metrics_port: 51054
+  max_recv_msg_size_mb: 32
+model:
+  model_id: voiceshield-aasist-east
+  model_type: MULTILINGUAL_AASIST_L
+  supported_languages:
+  - bn-IN
+  - as-IN
+  - or-IN
+  - bpy-IN

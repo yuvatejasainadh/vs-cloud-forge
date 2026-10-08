@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudforge-reference
+  namespace: cloudforge-system
+  labels:
+    app.kubernetes.io/name: cloudforge-reference
+    app.kubernetes.io/instance: cloudforge-reference
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: cloudforge
+    platform: cloudforge
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: cloudforge-reference
+  ports:
+    - name: grpc
+      port: 50051
+      targetPort: grpc
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+      protocol: TCP

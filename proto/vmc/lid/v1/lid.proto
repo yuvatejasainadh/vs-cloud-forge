@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package vmc.lid.v1;
+
+option go_package = "cloudforge-vmc-lid/gen/vmc/lid/v1;lidv1";
+
+// Language Identification Service for VoiceShield and Voice Model Core (VMC).
+service LIDService {
+  // IdentifyLanguage accepts speech audio and predicts the spoken language, language group, and target VM.
+  rpc IdentifyLanguage(IdentifyLanguageRequest) returns (IdentifyLanguageResponse);
+
+  // GetModelInfo returns metadata about the active LID model.
+  rpc GetModelInfo(ModelInfoRequest) returns (ModelInfoResponse);
+
+  // GetSupportedLanguages returns the canonical 19 VoiceShield languages and active model supported languages.
+  rpc GetSupportedLanguages(GetSupportedLanguagesRequest) returns (GetSupportedLanguagesResponse);
+
+  // ResolveLanguageGroup maps an ISO language code to its canonical detector group and VM.
+  rpc ResolveLanguageGroup(ResolveLanguageGroupRequest) returns (ResolveLanguageGroupResponse);
+}
+
+enum LIDStatus {
+  LID_STATUS_UNSPECIFIED = 0;
+  LID_STATUS_SUCCESS = 1;
+  LID_STATUS_LOW_CONFIDENCE = 2;
+  LID_STATUS_UNKNOWN = 3;
+  LID_STATUS_INVALID_AUDIO = 4;
+  LID_STATUS_INFERENCE_ERROR = 5;
+  LID_STATUS_UNSUPPORTED = 6;
+  LID_STATUS_MODEL_NOT_AVAILABLE = 7;
+  LID_STATUS_MODEL_HEAD_NOT_AVAILABLE = 8;
+}
+
+message IdentifyLanguageRequest {
+  // Raw PCM or WAV encoded audio bytes
+  bytes audio_content = 1;
+
+  // Sampling rate of the audio in Hz (default expected: 16000)
+  int32 sample_rate = 2;
+
+  // Number of audio channels (1 = mono, 2 = stereo)
+  int32 channels = 3;
+
+  // Audio format description: "pcm_s16le", "pcm_f32le", "wav"
+  string audio_format = 4;
+
+  // Unique request correlation ID
+  string request_id = 5;
+
+  // Optional target model ID (defaults to active model in registry)
+  string model_id = 6;
+
+  // Session ID for temporal tracking (LACR)
+  string session_id = 7;
+
+  // Sequential chunk index in the session
+  int32 chunk_index = 8;
+}
+
+message IdentifyLanguageResponse {
+  // Predicted ISO language code (e.g., "te-IN", "hi-IN", "en-IN")
+  string language = 1;
+
+  // Human-readable language name (e.g., "Telugu", "Hindi", "English")
+  string language_name = 2;
+
+  // Classification confidence score between 0.0 and 1.0
+  float confidence = 3;
+
+  // Resolved canonical language routing group (e.g., "SOUTH", "NORTH", "EAST", "NORTH_WEST_FRONTIER", "WEST", "ENGLISH")
+  string language_group = 4;
+
+  // Target VM identifier (e.g., "VM2_SOUTH", "VM3_NORTH", "VM4_EAST", "VM5_NORTH_WEST_FRONTIER", "VM6_WEST", "VM7_ENGLISH")
+  string target_vm = 5;
+
+  // High-level operational status of the inference
+  LIDStatus status = 6;
+
+  // Identifier of the model that performed inference
+  string model_id = 7;
+
+  // Semantic version or commit SHA of the loaded model
+  string model_version = 8;
+
+  // Request correlation ID echo
+  string request_id = 9;
+
+  // Time taken by the inference engine in milliseconds
+  double inference_duration_ms = 10;
+
+  // Complete distribution of language classification probabilities
+  map<string, float> probabilities = 11;
+}
+
+message ModelInfoRequest {
+  // Optional model identifier to query
+  string model_id = 1;
+}
+
+message ModelInfoResponse {
+  string model_id = 1;
+  string model_name = 2;
+  string provider = 3;
+  string framework = 4;
+  string version = 5;
+  int64 parameters = 6;
+  int32 sample_rate = 7;
+  int32 channels = 8;
+  repeated string supported_languages = 9;
+  string status = 10;
+  double artifact_size_mb = 11;
+}
+
+message GetSupportedLanguagesRequest {
+  // Optional filter by group (e.g. "SOUTH")
+  string group = 1;
+}
+
+message LanguageMetadata {
+  string language_code = 1;
+  string language_name = 2;
+  string native_name = 3;
+  string family = 4;
+  string group = 5;
+  string target_vm = 6;
+  bool is_supported_by_active_model = 7;
+}
+
+message GetSupportedLanguagesResponse {
+  // All canonical 19 VoiceShield languages
+  repeated LanguageMetadata canonical_languages = 1;
+  // Languages directly supported by current active model
+  repeated string active_model_languages = 2;
+  // Total canonical language count (19)
+  int32 total_canonical = 3;
+  // Active model language count
+  int32 total_active = 4;
+}
+
+message ResolveLanguageGroupRequest {
+  // ISO language code (e.g. "te-IN")
+  string language = 1;
+}
+
+message ResolveLanguageGroupResponse {
+  string language = 1;
+  string language_name = 2;
+  string group = 3;
+  string target_vm = 4;
+  string target_service = 5;
+  int32 target_port = 6;
+  bool is_canonical = 7;
+}

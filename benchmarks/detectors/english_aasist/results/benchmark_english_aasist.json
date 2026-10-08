@@ -1,0 +1,19 @@
+{
+  "model_id": "voiceshield-aasist-english",
+  "version": "v1.0.0",
+  "vm": "VM7_ENGLISH",
+  "group": "ENGLISH",
+  "language": "en-IN",
+  "provider": "cloudforge",
+  "status": "EVALUATED",
+  "iterations": 10,
+  "throughput_inf_per_sec": 7.72,
+  "latency_ms": {
+    "p50": 123.15,
+    "p95": 150.17,
+    "p99": 150.27,
+    "mean": 129.57
+  },
+  "memory_rss_mb": 454.91,
+  "timestamp": "2026-10-08T09:15:23Z"
+}

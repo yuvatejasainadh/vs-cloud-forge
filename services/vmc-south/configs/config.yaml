@@ -1,0 +1,18 @@
+service:
+  name: vmc-south
+  target_vm: VM2_SOUTH
+  group: SOUTH
+  version: v1.0.0-scaffold
+  status: PLANNED
+server:
+  grpc_port: 50052
+  metrics_port: 51052
+  max_recv_msg_size_mb: 32
+model:
+  model_id: voiceshield-aasist-south
+  model_type: MULTILINGUAL_AASIST_L
+  supported_languages:
+  - te-IN
+  - ta-IN
+  - ml-IN
+  - kn-IN

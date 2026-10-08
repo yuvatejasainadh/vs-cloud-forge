@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vmc-english
+  namespace: ml-platform
+  labels:
+    app.kubernetes.io/name: vmc-english
+    app.kubernetes.io/component: detector
+    app.kubernetes.io/part-of: cloudforge
+    platform.cloudforge.io/domain: vmc
+    voiceshield.io/vm: VM7_ENGLISH
+    voiceshield.io/group: ENGLISH
+    voiceshield.io/language: en-IN
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vmc-english
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vmc-english
+        app.kubernetes.io/component: detector
+        app.kubernetes.io/part-of: cloudforge
+        platform.cloudforge.io/domain: vmc
+        voiceshield.io/vm: VM7_ENGLISH
+        voiceshield.io/group: ENGLISH
+        voiceshield.io/language: en-IN
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        workload: ml
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+      containers:
+        - name: vmc-english
+          image: cloudforge/vmc-english:v2.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: grpc
+              containerPort: 50057
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          env:
+            - name: CF_GRPC_PORT
+              value: "50057"
+            - name: CF_METRICS_PORT
+              value: "9090"
+            - name: CLOUDFORGE_ENVIRONMENT
+              value: "production"
+            - name: AASIST_MODEL_ID
+              value: "voiceshield-aasist-english"
+            - name: AASIST_MODEL_VERSION
+              value: "v1.0.0"
+            - name: AASIST_MODEL_PATH
+              value: "/model-cache"
+            - name: AASIST_THRESHOLD
+              value: "0.50"
+            - name: AASIST_EXECUTION_PROVIDER
+              value: "CPUExecutionProvider"
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2

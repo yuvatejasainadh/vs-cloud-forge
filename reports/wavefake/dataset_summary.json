@@ -1,0 +1,24 @@
+{
+  "dataset_path": "C:\\Users\\yuvat\\Downloads\\sources_wavefake\\_sources_wavefake",
+  "total_files": 2007,
+  "valid_audio_files": 2007,
+  "invalid_audio_files": 0,
+  "total_duration_seconds": 14402.4908125,
+  "total_duration_hours": 4.000691892361111,
+  "min_duration_seconds": 4.001,
+  "max_duration_seconds": 10.09625,
+  "avg_duration_seconds": 7.176128954907822,
+  "sample_rate_distribution": {
+    "16000": 2007
+  },
+  "channel_distribution": {
+    "1": 2007
+  },
+  "format_distribution": {
+    ".wav": 2007
+  },
+  "label_distribution": {
+    "SPOOF": 1000,
+    "BONAFIDE": 1007
+  }
+}

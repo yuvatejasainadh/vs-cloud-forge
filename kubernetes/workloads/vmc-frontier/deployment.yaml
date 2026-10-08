@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vmc-frontier
+  namespace: ml-platform
+  labels:
+    app.kubernetes.io/name: vmc-frontier
+    app.kubernetes.io/component: detector
+    app.kubernetes.io/part-of: cloudforge
+    platform.cloudforge.io/domain: vmc
+    voiceshield.io/vm: VM5_NORTH_WEST_FRONTIER
+    voiceshield.io/group: NORTH_WEST_FRONTIER
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vmc-frontier
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vmc-frontier
+        app.kubernetes.io/component: detector
+        app.kubernetes.io/part-of: cloudforge
+        platform.cloudforge.io/domain: vmc
+        voiceshield.io/vm: VM5_NORTH_WEST_FRONTIER
+        voiceshield.io/group: NORTH_WEST_FRONTIER
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "51055"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        workload: ml
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+      containers:
+        - name: vmc-frontier
+          image: cloudforge/vmc-frontier:v1.0.0-scaffold
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: grpc
+              containerPort: 50055
+              protocol: TCP
+            - name: metrics
+              containerPort: 51055
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL

@@ -1,0 +1,17 @@
+service:
+  name: vmc-west
+  target_vm: VM6_WEST
+  group: WEST
+  version: v1.0.0-scaffold
+  status: PLANNED
+server:
+  grpc_port: 50056
+  metrics_port: 51056
+  max_recv_msg_size_mb: 32
+model:
+  model_id: voiceshield-aasist-west
+  model_type: MULTILINGUAL_AASIST_L
+  supported_languages:
+  - gu-IN
+  - raj-IN
+  - kut-IN

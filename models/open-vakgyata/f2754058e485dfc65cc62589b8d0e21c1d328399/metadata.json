@@ -1,0 +1,41 @@
+{
+  "model_id": "open-vakgyata",
+  "model_name": "Open-Vakgyata",
+  "provider": "onecxi",
+  "source": "huggingface",
+  "repository": "onecxi/open-vakgyata",
+  "task": "speech-language-identification",
+  "framework": "onnx",
+  "version": "f2754058e485dfc65cc62589b8d0e21c1d328399",
+  "parameters": 58746794,
+  "artifact_size_mb": 224.19,
+  "sample_rate": 16000,
+  "channels": 1,
+  "status": "active",
+  "supported_languages": [
+    "en-IN",
+    "hi-IN",
+    "or-IN",
+    "bn-IN",
+    "ta-IN",
+    "te-IN",
+    "kn-IN",
+    "ml-IN",
+    "mr-IN",
+    "gu-IN"
+  ],
+  "language_names": {
+    "en-IN": "English",
+    "hi-IN": "Hindi",
+    "or-IN": "Odia",
+    "bn-IN": "Bengali",
+    "ta-IN": "Tamil",
+    "te-IN": "Telugu",
+    "kn-IN": "Kannada",
+    "ml-IN": "Malayalam",
+    "mr-IN": "Marathi",
+    "gu-IN": "Gujarati"
+  },
+  "sha256": "c4cc68450a7e571c21acb6928553f5cbba3e5f136d554210c07f5fbbe37d1d79",
+  "synced_at": "2026-10-06T10:27:43Z"
+}

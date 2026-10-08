@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cloudforge-system
+  labels:
+    platform: cloudforge
+    environment: local
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: voiceshield
+  labels:
+    platform: voiceshield
+    environment: local
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ml-platform
+  labels:
+    platform: vmc
+    environment: local

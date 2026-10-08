@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vmc-lid
+  namespace: ml-platform
+  labels:
+    app.kubernetes.io/name: vmc-lid
+    app.kubernetes.io/component: inference
+    app.kubernetes.io/part-of: cloudforge
+    platform.cloudforge.io/domain: vmc
+    voiceshield.io/vm: VM1_LID
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vmc-lid
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vmc-lid
+        app.kubernetes.io/component: inference
+        app.kubernetes.io/part-of: cloudforge
+        platform.cloudforge.io/domain: vmc
+        voiceshield.io/vm: VM1_LID
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        workload: ml
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: vmc-lid
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: vmc-lid
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+      containers:
+        - name: vmc-lid
+          image: cloudforge/vmc-lid:v2.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: grpc
+              containerPort: 50051
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          env:
+            - name: CF_GRPC_PORT
+              value: "50051"
+            - name: CF_METRICS_PORT
+              value: "9090"
+            - name: LID_MODEL_ID
+              value: "open-vakgyata"
+            - name: LID_CONFIDENCE_THRESHOLD
+              value: "0.50"
+            - name: CLOUDFORGE_ENVIRONMENT
+              value: "production"
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2

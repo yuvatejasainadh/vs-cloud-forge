@@ -1,0 +1,32 @@
+# CloudForge Git Ignore
+# Model binary artifacts and caches
+model-cache/
+models/huggingface/
+models/llm/
+.cache/
+*.onnx
+*.bin
+*.pt
+*.pth
+*.safetensors
+*.lock
+*.incomplete
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Go binaries
+*.exe
+*.test
+
+# Environments
+venv/
+.env
+.venv/
+

@@ -1,0 +1,56 @@
+# CloudForge 7VM Language Group Routing Configuration
+# Separates raw model language predictions from compute node / VM routing.
+version: "1.0.0"
+default_group: "GROUP_00"
+
+groups:
+  GROUP_01:
+    name: "Indo-Aryan North & Central"
+    description: "Hindi, Marathi, Gujarati"
+    languages:
+      - hi-IN
+      - mr-IN
+      - gu-IN
+  GROUP_02:
+    name: "Indo-Aryan East"
+    description: "Bengali, Odia"
+    languages:
+      - bn-IN
+      - or-IN
+  GROUP_03:
+    name: "Dravidian South-Central"
+    description: "Telugu, Kannada"
+    languages:
+      - te-IN
+      - kn-IN
+  GROUP_04:
+    name: "Dravidian South"
+    description: "Tamil, Malayalam"
+    languages:
+      - ta-IN
+      - ml-IN
+  GROUP_05:
+    name: "Indian English"
+    description: "English (India)"
+    languages:
+      - en-IN
+  GROUP_06:
+    name: "Reserved VM 06"
+    description: "Reserved for future regional language cluster"
+    languages: []
+  GROUP_07:
+    name: "Reserved VM 07"
+    description: "Reserved for international / cross-lingual fallback"
+    languages: []
+
+language_to_group:
+  hi-IN: "GROUP_01"
+  mr-IN: "GROUP_01"
+  gu-IN: "GROUP_01"
+  bn-IN: "GROUP_02"
+  or-IN: "GROUP_02"
+  te-IN: "GROUP_03"
+  kn-IN: "GROUP_03"
+  ta-IN: "GROUP_04"
+  ml-IN: "GROUP_04"
+  en-IN: "GROUP_05"

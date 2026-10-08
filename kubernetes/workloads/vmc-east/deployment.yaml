@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vmc-east
+  namespace: ml-platform
+  labels:
+    app.kubernetes.io/name: vmc-east
+    app.kubernetes.io/component: detector
+    app.kubernetes.io/part-of: cloudforge
+    platform.cloudforge.io/domain: vmc
+    voiceshield.io/vm: VM4_EAST
+    voiceshield.io/group: EAST
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vmc-east
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vmc-east
+        app.kubernetes.io/component: detector
+        app.kubernetes.io/part-of: cloudforge
+        platform.cloudforge.io/domain: vmc
+        voiceshield.io/vm: VM4_EAST
+        voiceshield.io/group: EAST
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "51054"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        workload: ml
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+      containers:
+        - name: vmc-east
+          image: cloudforge/vmc-east:v1.0.0-scaffold
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: grpc
+              containerPort: 50054
+              protocol: TCP
+            - name: metrics
+              containerPort: 51054
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL

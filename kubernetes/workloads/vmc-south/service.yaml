@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vmc-south
+  namespace: ml-platform
+  labels:
+    app.kubernetes.io/name: vmc-south
+    app.kubernetes.io/component: detector
+    voiceshield.io/vm: VM2_SOUTH
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 50052
+      targetPort: 50052
+      protocol: TCP
+    - name: metrics
+      port: 51052
+      targetPort: 51052
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: vmc-south

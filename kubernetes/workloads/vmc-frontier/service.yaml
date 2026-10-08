@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vmc-frontier
+  namespace: ml-platform
+  labels:
+    app.kubernetes.io/name: vmc-frontier
+    app.kubernetes.io/component: detector
+    voiceshield.io/vm: VM5_NORTH_WEST_FRONTIER
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 50055
+      targetPort: 50055
+      protocol: TCP
+    - name: metrics
+      port: 51055
+      targetPort: 51055
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: vmc-frontier
